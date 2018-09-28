@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Action Directe</string>
+    app_subtitle_text
+    <string name="dummy_button">Dummy Button</string>
+    <string name="app_title_text">Action Directe</string>
+    <string name="app_title_text_a">Action</string>
+    <string name="app_title_text_b">Directe</string>
+    <string name="app_subtitle_text">The Climbing Training App</string>
+    <string name="date_format">yyyy-MM-dd</string>
+</resources>

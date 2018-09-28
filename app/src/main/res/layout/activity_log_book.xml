@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.android.anothertest.logbookmodule.LogBook">
+
+    <LinearLayout
+        android:id="@+id/layout_header"
+        android:layout_width="match_parent"
+        android:layout_height="61dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/header_topographicmappattern2a"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:scaleType="centerCrop">
+
+        <RelativeLayout
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="0">
+
+            <TextView
+                android:id="@+id/button_previous_day"
+                style="@style/DarkMenuButtons"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="4dp"
+                android:background="@drawable/ic_baseline_navigate_before_white_24px" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/textview_date"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:background="#99000000"
+            android:gravity="center"
+            android:textSize="18dp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            tools:text="Display Date" />
+
+        <RelativeLayout
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="0">
+
+            <TextView
+                android:id="@+id/button_next_day"
+                style="@style/DarkMenuButtons"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="4dp"
+                android:background="@drawable/ic_baseline_navigate_next_white_24px" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/layout_header"
+        android:background="@color/colorAccent" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/layout_header"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/button_log_climb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="4dp"
+            android:text="Add Climb"
+            style="@style/DarkMenuButtons"
+            android:textSize="16dp" />
+
+        <LinearLayout
+            android:id="@+id/wrapper_add_workout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_above="@id/button_log_climb" >
+
+            <TextView
+                android:id="@+id/button_add_workout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginRight="1dp"
+                android:layout_gravity="center_horizontal|center"
+                style="@style/DarkMenuButtons"
+                android:text="Add Workout"
+                android:layout_marginTop="4dp" />
+
+            <TextView
+                android:id="@+id/button_copy_workout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="1dp"
+                android:layout_weight="1"
+                android:layout_gravity="center_horizontal|center"
+                style="@style/DarkMenuButtons"
+                android:text="Copy Workout"
+                android:layout_marginTop="4dp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/divider_lower"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_above="@id/wrapper_add_workout"
+            android:background="@color/colorAccent" />
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/log_book_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/divider_lower">
+
+        </android.support.v4.view.ViewPager>
+
+    </RelativeLayout>
+
+</RelativeLayout>

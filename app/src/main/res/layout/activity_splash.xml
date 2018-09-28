@@ -1,0 +1,130 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.android.anothertest.SplashActivity">
+
+    <!-- The primary full-screen view. This can be replaced with whatever view
+         is needed to present your content, e.g. VideoView, SurfaceView,
+         TextureView, etc. -->
+
+    <ImageView
+        android:id="@+id/fullscreen_content"
+        android:scaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:src="@drawable/background_cloudwrappedmountain" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="48dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="#FFFFFF"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/fullscreen_title_a"
+                android:paddingRight="4dp"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="50dp"
+                android:gravity="right"
+                android:keepScreenOn="true"
+                android:text="@string/app_title_text_a"
+                android:textColor="#FFFFFF"
+                android:textSize="36sp"
+                android:background="#80000000"/>
+
+            <TextView
+                android:id="@+id/fullscreen_title_b"
+                android:layout_weight="1"
+                android:paddingLeft="4dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="left"
+                android:keepScreenOn="true"
+                android:text="@string/app_title_text_b"
+                android:textColor="#FFFFFF"
+                android:textSize="36sp"
+                android:textStyle="italic"
+                android:background="#80000000"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/fullscreen_subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:gravity="center"
+            android:keepScreenOn="true"
+            android:text="@string/app_subtitle_text"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="italic"
+            android:background="#80000000"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="#FFFFFF"/>
+
+    </LinearLayout>
+
+    <!-- This FrameLayout insets its children based on system windows using
+         android:fitsSystemWindows. -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <LinearLayout
+            android:id="@+id/fullscreen_content_controls"
+            style="?metaButtonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:background="@color/black_overlay"
+            android:orientation="vertical"
+            tools:ignore="UselessParent">
+
+            <TextView
+                android:id="@+id/button1"
+                style="@style/DarkMenuButtons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginBottom="1dp"
+                android:text="Log Book" />
+
+            <TextView
+                android:id="@+id/button2"
+                style="@style/DarkMenuButtons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginBottom="1dp"
+                android:text="Calendar" />
+
+            <TextView
+                android:id="@+id/button3"
+                style="@style/DarkMenuButtons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginBottom="1dp"
+                android:text="Analysis" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+</FrameLayout>

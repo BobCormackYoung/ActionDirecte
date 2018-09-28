@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#6874D1</color>
+    <color name="black_overlay">#66000000</color>
+    <color name="colorLogBookListItemBkgd">#E6FFF7DA</color>
+    <color name="colorClimbingItems">#E66874D1</color>
+    <color name="colorTrainingItems">#E668D19B</color>
+    <color name="colorTrainingClimbItems">#E6f47d42</color>
+    <color name="colorClimbingItemsV2">#0e12e8</color>
+    <color name="colorTrainingItemsV2">#6f0ce8</color>
+    <color name="colorTrainingClimbItemsV2">#0ed3ff</color>
+</resources>

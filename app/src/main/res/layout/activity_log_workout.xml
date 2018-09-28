@@ -1,0 +1,641 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.android.anothertest.logbookmodule.AddWorkout">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp">
+
+        <TextView
+            android:id="@+id/pageTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ADD WORKOUT"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/chronometerWrapper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Timer:"
+                android:textAppearance="?android:textAppearanceLarge" />
+
+            <Chronometer
+                android:id="@+id/chronometer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:textAppearance="?android:textAppearanceLarge" />
+
+            <Button
+                android:id="@+id/buttonStartChrono"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:text="St" />
+
+            <Button
+                android:id="@+id/buttonPauseChrono"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:text="Pa" />
+
+            <Button
+                android:id="@+id/buttonResetChrono"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:text="Re" />
+
+            <Button
+                android:id="@+id/buttonSaveChrono"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:text="Sv" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/colorTrainingItems"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--Buttons for saving-->
+        <LinearLayout
+            android:id="@+id/bottom_buttons2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/log_training_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Cancel" />
+
+            <Button
+                android:id="@+id/log_training_save"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Save" />
+
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/bottom_buttons2">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!--Date-->
+                <LinearLayout
+                    android:id="@+id/workoutTextWrapper1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/workoutTextHeader1"
+                        style="@style/AdderHeaderStyle"
+                        android:text="Date" />
+
+                    <EditText
+                        android:id="@+id/workoutEditText1"
+                        style="@style/EditTextNonFocusableNonEditableNonClickable"
+                        android:hint="Date" />
+
+                </LinearLayout>
+
+                <!--Training Type-->
+                <LinearLayout
+                    android:id="@+id/workoutTextWrapper2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/workoutTextHeader2"
+                        style="@style/AdderHeaderStyle"
+                        android:text="Training Type" />
+
+                    <EditText
+                        android:id="@+id/workoutEditText2"
+                        style="@style/EditTextNonFocusableNonEditableClickable"
+                        android:clickable="true"
+                        android:hint="Click to select" />
+
+                </LinearLayout>
+
+                <!--Weight-->
+                <LinearLayout
+                    android:id="@+id/workoutTextWrapper3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/workoutTextHeader3"
+                        style="@style/AdderHeaderStyle"
+                        android:text="Weight" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/workoutButtonMinus3a"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="- -"
+                            android:textAppearance="?android:textAppearanceLarge" />
+
+                        <Button
+                            android:id="@+id/workoutButtonMinus3"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="-"
+                            android:textAppearance="?android:textAppearanceLarge" />
+
+                        <EditText
+                            android:id="@+id/workoutEditText3"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="0.0"
+                            android:inputType="numberDecimal"
+                            android:textAlignment="center" />
+
+                        <Button
+                            android:id="@+id/workoutButtonPlus3"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="+"
+                            android:textAppearance="?android:textAppearanceLarge" />
+
+                        <Button
+                            android:id="@+id/workoutButtonPlus3a"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="++"
+                            android:textAppearance="?android:textAppearanceLarge" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <!--Set Count-->
+                <LinearLayout
+                    android:id="@+id/workoutTextWrapper4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/workoutTextHeader4"
+                        style="@style/AdderHeaderStyle"
+                        android:text="Set Count" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/workoutButtonMinus4a"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="- -"
+                            android:textAppearance="?android:textAppearanceLarge" />
+
+                        <Button
+                            android:id="@+id/workoutButtonMinus4"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="-"
+                            android:textAppearance="?android:textAppearanceLarge" />
+
+                        <EditText
+                            android:id="@+id/workoutEditText4"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="1"
+                            android:inputType="numberDecimal"
+                            android:textAlignment="center" />
+
+                        <Button
+                            android:id="@+id/workoutButtonPlus4"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="+"
+                            android:textAppearance="?android:textAppearanceLarge" />
+
+                        <Button
+                            android:id="@+id/workoutButtonPlus4a"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="++"
+                            android:textAppearance="?android:textAppearanceLarge" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!--Reps Per Set-->
+                <LinearLayout
+                    android:id="@+id/workoutTextWrapper5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/workoutTextHeader5"
+                        style="@style/AdderHeaderStyle"
+                        android:text="Reps per Set" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/workoutButtonMinus5a"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="- -"
+                            android:textAppearance="?android:textAppearanceLarge" />
+
+                        <Button
+                            android:id="@+id/workoutButtonMinus5"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="-"
+                            android:textAppearance="?android:textAppearanceLarge" />
+
+                        <EditText
+                            android:id="@+id/workoutEditText5"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="1"
+                            android:inputType="numberDecimal"
+                            android:textAlignment="center" />
+
+                        <Button
+                            android:id="@+id/workoutButtonPlus5"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="+"
+                            android:textAppearance="?android:textAppearanceLarge" />
+
+                        <Button
+                            android:id="@+id/workoutButtonPlus5a"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="++"
+                            android:textAppearance="?android:textAppearanceLarge" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!--Rep Duration-->
+                <LinearLayout
+                    android:id="@+id/workoutTextWrapper6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/workoutTextHeader6"
+                        style="@style/AdderHeaderStyle"
+                        android:text="Rep Duration" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/workoutButtonMinus6a"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="- -"
+                            android:textAppearance="?android:textAppearanceLarge" />
+
+                        <Button
+                            android:id="@+id/workoutButtonMinus6"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="-"
+                            android:textAppearance="?android:textAppearanceLarge" />
+
+                        <EditText
+                            android:id="@+id/workoutEditText6"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="0"
+                            android:inputType="numberDecimal"
+                            android:textAlignment="center" />
+
+                        <Button
+                            android:id="@+id/workoutButtonPlus6"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="+"
+                            android:textAppearance="?android:textAppearanceLarge" />
+
+                        <Button
+                            android:id="@+id/workoutButtonPlus6a"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="++"
+                            android:textAppearance="?android:textAppearanceLarge" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <!--Rest per Set-->
+                <LinearLayout
+                    android:id="@+id/workoutTextWrapper7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/workoutTextHeader7"
+                        style="@style/AdderHeaderStyle"
+                        android:text="Rest per Set" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/workoutButtonMinus7a"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="- -"
+                            android:textAppearance="?android:textAppearanceLarge" />
+
+                        <Button
+                            android:id="@+id/workoutButtonMinus7"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="-"
+                            android:textAppearance="?android:textAppearanceLarge" />
+
+                        <EditText
+                            android:id="@+id/workoutEditText7"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="0"
+                            android:inputType="numberDecimal"
+                            android:textAlignment="center" />
+
+                        <Button
+                            android:id="@+id/workoutButtonPlus7"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="+"
+                            android:textAppearance="?android:textAppearanceLarge" />
+
+                        <Button
+                            android:id="@+id/workoutButtonPlus7a"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="++"
+                            android:textAppearance="?android:textAppearanceLarge" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <!--Grade-->
+                <LinearLayout
+                    android:id="@+id/workoutTextWrapper8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/workoutTextHeader8"
+                        style="@style/AdderHeaderStyle"
+                        android:text="Grade/Difficulty" />
+
+                    <EditText
+                        android:id="@+id/workoutEditText8"
+                        style="@style/EditTextNonFocusableNonEditableClickable"
+                        android:clickable="true"
+                        android:hint="Click to select" />
+
+                </LinearLayout>
+
+                <!--Move Count-->
+                <LinearLayout
+                    android:id="@+id/workoutTextWrapper9"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/workoutTextHeader9"
+                        style="@style/AdderHeaderStyle"
+                        android:text="Move Count" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/workoutButtonMinus9a"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="- -"
+                            android:textAppearance="?android:textAppearanceLarge" />
+
+                        <Button
+                            android:id="@+id/workoutButtonMinus9"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="-"
+                            android:textAppearance="?android:textAppearanceLarge" />
+
+                        <EditText
+                            android:id="@+id/workoutEditText9"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="0"
+                            android:inputType="numberDecimal"
+                            android:textAlignment="center" />
+
+                        <Button
+                            android:id="@+id/workoutButtonPlus9"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="+"
+                            android:textAppearance="?android:textAppearanceLarge" />
+
+                        <Button
+                            android:id="@+id/workoutButtonPlus9a"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="++"
+                            android:textAppearance="?android:textAppearanceLarge" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <!--Wall Angle-->
+                <LinearLayout
+                    android:id="@+id/workoutTextWrapper10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/workoutTextHeader10"
+                        style="@style/AdderHeaderStyle"
+                        android:text="Wall Angle" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/workoutButtonMinus10a"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="- -"
+                            android:textAppearance="?android:textAppearanceLarge" />
+
+                        <Button
+                            android:id="@+id/workoutButtonMinus10"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="-"
+                            android:textAppearance="?android:textAppearanceLarge" />
+
+                        <EditText
+                            android:id="@+id/workoutEditText10"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="0"
+                            android:inputType="numberDecimal"
+                            android:textAlignment="center" />
+
+                        <Button
+                            android:id="@+id/workoutButtonPlus10"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="+"
+                            android:textAppearance="?android:textAppearanceLarge" />
+
+                        <Button
+                            android:id="@+id/workoutButtonPlus10a"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="++"
+                            android:textAppearance="?android:textAppearanceLarge" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <!--Hold Type-->
+                <LinearLayout
+                    android:id="@+id/workoutTextWrapper11"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/workoutTextHeader11"
+                        style="@style/AdderHeaderStyle"
+                        android:text="Hold Type" />
+
+                    <EditText
+                        android:id="@+id/workoutEditText11"
+                        style="@style/EditTextNonFocusableNonEditableClickable"
+                        android:clickable="true"
+                        android:hint="Click to select" />
+
+                </LinearLayout>
+
+                <!--Complete-->
+                <LinearLayout
+                    android:id="@+id/workoutTextWrapper12"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/workoutTextHeader12"
+                        style="@style/AdderHeaderStyle"
+                        android:text="Complete?" />
+
+                    <CheckBox
+                        android:id="@+id/workoutCheckBox12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </ScrollView>
+
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--https://stackoverflow.com/questions/3882064/how-to-change-color-of-button-in-android-when-clicked-->
+
+    <!--    <item android:drawable="#99000000" android:state_pressed="true"/>
+        <item android:drawable="#99000000" android:state_focused="true"/>
+        <item android:drawable="#99000000"/>-->
+
+    <item android:state_pressed="true">
+        <shape>
+            <solid android:color="#B3000000" />
+            <corners android:radius="0dp" />
+        </shape>
+    </item>
+
+    <item android:state_focused="true">
+        <shape>
+            <solid android:color="#B3000000" />
+            <corners android:radius="0dp" />
+        </shape>
+    </item>
+
+    <item>
+        <shape>
+            <solid android:color="#99000000" />
+            <corners android:radius="0dp" />
+        </shape>
+    </item>
+
+</selector>
