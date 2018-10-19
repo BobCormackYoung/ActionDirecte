@@ -46,14 +46,14 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/log_climb_cancel"
+                android:id="@+id/copy_workout_cancel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Cancel" />
 
             <Button
-                android:id="@+id/log_climb_save"
+                android:id="@+id/copy_workout_save"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -97,135 +97,219 @@
                     android:layout_height="match_parent">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="8dp" >
 
-                        <RadioGroup
-                            android:id="@+id/rg_copy_workout_selector"
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:layout_height="48dp"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
 
                             <RadioButton
                                 android:id="@+id/rb_copy_workout_single_day"
-                                android:layout_width="wrap_content"
-                                android:layout_height="24dp" />
-
-                            <RadioButton
-                                android:id="@+id/rb_copy_workout_multiple_days"
-                                android:layout_width="wrap_content"
-                                android:layout_height="24dp" />
-
-                        </RadioGroup>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:gravity="center" />
 
                             <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="24dp"
+                                android:layout_width="60dp"
+                                android:layout_height="wrap_content"
                                 android:text="Copy to: "
-                                android:textSize="16sp" />
+                                android:textSize="16sp"
+                                android:layout_marginRight="8dp"
+                                android:layout_marginLeft="8dp" />
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="24dp"
-                                android:text="Copy to: "
-                                android:textSize="16sp" />
+                            <EditText
+                                android:id="@+id/et_copy_workout_date"
+                                android:layout_width="108dp"
+                                android:layout_height="wrap_content"
+                                android:inputType="none"
+                                android:gravity="center"
+                                android:text="Tap Here"
+                                android:textSize="16sp"
+                                android:editable="false"
+                                android:focusable="false"/>
 
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <RadioButton
+                                android:id="@+id/rb_copy_workout_multiple_days"
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:gravity="center"/>
+
+                            <TextView
+                                android:layout_width="60dp"
+                                android:layout_height="wrap_content"
+                                android:text="Copy to: "
+                                android:textSize="16sp"
+                                android:layout_marginRight="8dp"
+                                android:layout_marginLeft="8dp"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="36dp"
+                            android:gravity="center_vertical">
+
+                            <com.youngonessoft.android.actiondirecte.util.CheckableTextView
+                                android:id="@+id/tv_copy_workout_monday"
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="4dp"
+                                android:gravity="center"
+                                android:text="M"
+                                android:clickable="true"
+                                android:background="@drawable/day_select_ring"/>
+
+                            <com.youngonessoft.android.actiondirecte.util.CheckableTextView
+                                android:id="@+id/tv_copy_workout_tuesday"
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="4dp"
+                                android:gravity="center"
+                                android:text="T"
+                                android:clickable="true"
+                                android:background="@drawable/day_select_ring"/>
+
+                            <com.youngonessoft.android.actiondirecte.util.CheckableTextView
+                                android:id="@+id/tv_copy_workout_wednesday"
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="4dp"
+                                android:gravity="center"
+                                android:text="W"
+                                android:clickable="true"
+                                android:background="@drawable/day_select_ring"/>
+
+                            <com.youngonessoft.android.actiondirecte.util.CheckableTextView
+                                android:id="@+id/tv_copy_workout_thursday"
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="4dp"
+                                android:gravity="center"
+                                android:text="T"
+                                android:clickable="true"
+                                android:background="@drawable/day_select_ring"/>
+
+                            <com.youngonessoft.android.actiondirecte.util.CheckableTextView
+                                android:id="@+id/tv_copy_workout_friday"
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="4dp"
+                                android:gravity="center"
+                                android:text="F"
+                                android:clickable="true"
+                                android:background="@drawable/day_select_ring"/>
+
+                            <com.youngonessoft.android.actiondirecte.util.CheckableTextView
+                                android:id="@+id/tv_copy_workout_saturday"
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="4dp"
+                                android:gravity="center"
+                                android:text="S"
+                                android:clickable="true"
+                                android:background="@drawable/day_select_ring"/>
+
+                            <com.youngonessoft.android.actiondirecte.util.CheckableTextView
+                                android:id="@+id/tv_copy_workout_sunday"
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="4dp"
+                                android:gravity="center"
+                                android:text="S"
+                                android:clickable="true"
+                                android:background="@drawable/day_select_ring"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="36dp"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:layout_width="60dp"
+                                android:layout_height="24dp"
+                                android:text="Every "
+                                android:textSize="16sp"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginRight="8dp"/>
 
                             <EditText
-                                android:id="@+id/et_copy_workout_to_date"
+                                android:id="@+id/et_copy_workout_everyweek"
+                                android:layout_width="48dp"
+                                android:layout_height="wrap_content"
+                                android:inputType="none"
+                                android:gravity="center"
+                                android:text="20"
+                                android:editable="false"
+                                android:focusable="false"/>
+
+                            <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="24dp"
-                                tools:text="20/20/2018"
-                                android:textSize="16sp"/>
+                                android:text=" Weeks "
+                                android:textSize="16sp"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginRight="8dp"/>
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="36dp"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:layout_width="60dp"
+                                android:layout_height="24dp"
+                                android:text="For "
+                                android:textSize="16sp"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginRight="8dp"/>
+
+                            <EditText
+                                android:id="@+id/et_copy_workout_forweeks"
+                                android:layout_width="48dp"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal">
+                                android:inputType="none"
+                                android:gravity="center"
+                                android:text="20"
+                                android:editable="false"
+                                android:focusable="false" />
 
-                                <TextView
-                                    android:id="@+id/tv_copy_workout_monday"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="4dp"
-                                    android:layout_marginRight="4dp"
-                                    android:gravity="center"
-                                    android:text="M"
-                                    android:background="@drawable/day_select_ring"/>
-
-                                <TextView
-                                    android:id="@+id/tv_copy_workout_tuesday"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="4dp"
-                                    android:layout_marginRight="4dp"
-                                    android:gravity="center"
-                                    android:text="T"
-                                    android:background="@drawable/day_select_ring"/>
-
-                                <TextView
-                                    android:id="@+id/tv_copy_workout_wednesday"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="4dp"
-                                    android:layout_marginRight="4dp"
-                                    android:gravity="center"
-                                    android:text="W"
-                                    android:background="@drawable/day_select_ring"/>
-
-                                <TextView
-                                    android:id="@+id/tv_copy_workout_thursday"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="4dp"
-                                    android:layout_marginRight="4dp"
-                                    android:gravity="center"
-                                    android:text="T"
-                                    android:background="@drawable/day_select_ring"/>
-
-                                <TextView
-                                    android:id="@+id/tv_copy_workout_friday"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="4dp"
-                                    android:layout_marginRight="4dp"
-                                    android:gravity="center"
-                                    android:text="F"
-                                    android:background="@drawable/day_select_ring"/>
-
-                                <TextView
-                                    android:id="@+id/tv_copy_workout_saturday"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="4dp"
-                                    android:layout_marginRight="4dp"
-                                    android:gravity="center"
-                                    android:text="S"
-                                    android:background="@drawable/day_select_ring"/>
-
-                                <TextView
-                                    android:id="@+id/tv_copy_workout_sunday"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="4dp"
-                                    android:layout_marginRight="4dp"
-                                    android:gravity="center"
-                                    android:text="S"
-                                    android:background="@drawable/day_select_ring"/>
-
-                            </LinearLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="24dp"
+                                android:text=" Weeks "
+                                android:textSize="16sp"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginRight="8dp"/>
 
                         </LinearLayout>
 
