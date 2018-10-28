@@ -727,6 +727,116 @@ public class DatabaseReadWrite {
 
     }
 
+    public static long copyWorkoutEntry(int inputRowID, long newDate, boolean copyAsComplete, Context mContext) {
+
+        DatabaseHelper handler = new DatabaseHelper(mContext);
+        SQLiteDatabase database = handler.getWritableDatabase();
+
+        String[] projection = {
+                DatabaseContract.WorkoutLogEntry._ID,
+                DatabaseContract.WorkoutLogEntry.COLUMN_DATE,
+                DatabaseContract.WorkoutLogEntry.COLUMN_WORKOUTTYPECODE,
+                DatabaseContract.WorkoutLogEntry.COLUMN_WORKOUTCODE,
+                DatabaseContract.WorkoutLogEntry.COLUMN_ISCLIMB,
+                DatabaseContract.WorkoutLogEntry.COLUMN_WEIGHT,
+                DatabaseContract.WorkoutLogEntry.COLUMN_SETCOUNT,
+                DatabaseContract.WorkoutLogEntry.COLUMN_REPCOUNTPERSET,
+                DatabaseContract.WorkoutLogEntry.COLUMN_REPDURATIONPERSET,
+                DatabaseContract.WorkoutLogEntry.COLUMN_RESTDURATIONPERSET,
+                DatabaseContract.WorkoutLogEntry.COLUMN_GRADETYPECODE,
+                DatabaseContract.WorkoutLogEntry.COLUMN_GRADECODE,
+                DatabaseContract.WorkoutLogEntry.COLUMN_MOVECOUNT,
+                DatabaseContract.WorkoutLogEntry.COLUMN_WALLANGLE,
+                DatabaseContract.WorkoutLogEntry.COLUMN_HOLDTYPE,
+                DatabaseContract.WorkoutLogEntry.COLUMN_ISCOMPLETE};
+        String whereClause = DatabaseContract.WorkoutLogEntry._ID + "=?";
+        String[] whereValue = {String.valueOf(inputRowID)};
+
+        Cursor cursor = database.query(DatabaseContract.WorkoutLogEntry.TABLE_NAME,
+                projection,
+                whereClause,
+                whereValue,
+                null,
+                null,
+                null);
+
+
+        cursor.moveToFirst();
+
+        int idColumnOutput = cursor.getColumnIndex(DatabaseContract.WorkoutLogEntry.COLUMN_WORKOUTTYPECODE);
+        int outputWorkoutTypeCode = cursor.getInt(idColumnOutput);
+
+        idColumnOutput = cursor.getColumnIndex(DatabaseContract.WorkoutLogEntry.COLUMN_WORKOUTCODE);
+        int outputWorkoutCode = cursor.getInt(idColumnOutput);
+
+        idColumnOutput = cursor.getColumnIndex(DatabaseContract.WorkoutLogEntry.COLUMN_ISCLIMB);
+        int outputIsClimb = cursor.getInt(idColumnOutput);
+
+        idColumnOutput = cursor.getColumnIndex(DatabaseContract.WorkoutLogEntry.COLUMN_WEIGHT);
+        double outputWeight = cursor.getDouble(idColumnOutput);
+
+        idColumnOutput = cursor.getColumnIndex(DatabaseContract.WorkoutLogEntry.COLUMN_SETCOUNT);
+        int outputSetCount = cursor.getInt(idColumnOutput);
+
+        idColumnOutput = cursor.getColumnIndex(DatabaseContract.WorkoutLogEntry.COLUMN_REPCOUNTPERSET);
+        int outputRepCount = cursor.getInt(idColumnOutput);
+
+        idColumnOutput = cursor.getColumnIndex(DatabaseContract.WorkoutLogEntry.COLUMN_REPDURATIONPERSET);
+        int outputRepDuration = cursor.getInt(idColumnOutput);
+
+        idColumnOutput = cursor.getColumnIndex(DatabaseContract.WorkoutLogEntry.COLUMN_RESTDURATIONPERSET);
+        int outputRestDuration = cursor.getInt(idColumnOutput);
+
+        idColumnOutput = cursor.getColumnIndex(DatabaseContract.WorkoutLogEntry.COLUMN_GRADETYPECODE);
+        int outputGradeTypeCode = cursor.getInt(idColumnOutput);
+
+        idColumnOutput = cursor.getColumnIndex(DatabaseContract.WorkoutLogEntry.COLUMN_GRADECODE);
+        int outputGradeCode = cursor.getInt(idColumnOutput);
+
+        idColumnOutput = cursor.getColumnIndex(DatabaseContract.WorkoutLogEntry.COLUMN_MOVECOUNT);
+        int outputMoveCount = cursor.getInt(idColumnOutput);
+
+        idColumnOutput = cursor.getColumnIndex(DatabaseContract.WorkoutLogEntry.COLUMN_WALLANGLE);
+        int outputWallAngle = cursor.getInt(idColumnOutput);
+
+        idColumnOutput = cursor.getColumnIndex(DatabaseContract.WorkoutLogEntry.COLUMN_HOLDTYPE);
+        int outputHoldType = cursor.getInt(idColumnOutput);
+
+        int outputIsComplete;
+        if (copyAsComplete){
+            outputIsComplete=DatabaseContract.IS_COMPLETE;
+        } else {
+            outputIsComplete=DatabaseContract.IS_INCOMPLETE;
+        }
+
+        cursor.close();
+
+        // write update
+
+        // Create a ContentValues object where column names are the keys,
+        ContentValues valuesOut = new ContentValues();
+        valuesOut.put(DatabaseContract.WorkoutLogEntry.COLUMN_DATE, newDate); // long
+        valuesOut.put(DatabaseContract.WorkoutLogEntry.COLUMN_WORKOUTTYPECODE, outputWorkoutTypeCode); // int
+        valuesOut.put(DatabaseContract.WorkoutLogEntry.COLUMN_WORKOUTCODE, outputWorkoutCode); // int
+        valuesOut.put(DatabaseContract.WorkoutLogEntry.COLUMN_ISCLIMB, outputIsClimb); // int = 0
+        valuesOut.put(DatabaseContract.WorkoutLogEntry.COLUMN_WEIGHT, outputWeight); // long
+        valuesOut.put(DatabaseContract.WorkoutLogEntry.COLUMN_SETCOUNT, outputSetCount); // int
+        valuesOut.put(DatabaseContract.WorkoutLogEntry.COLUMN_REPCOUNTPERSET, outputRepCount); // int
+        valuesOut.put(DatabaseContract.WorkoutLogEntry.COLUMN_REPDURATIONPERSET, outputRepDuration); // int
+        valuesOut.put(DatabaseContract.WorkoutLogEntry.COLUMN_RESTDURATIONPERSET, outputRestDuration); // int
+        valuesOut.put(DatabaseContract.WorkoutLogEntry.COLUMN_GRADETYPECODE, outputGradeTypeCode); // int
+        valuesOut.put(DatabaseContract.WorkoutLogEntry.COLUMN_MOVECOUNT, outputMoveCount); // int
+        valuesOut.put(DatabaseContract.WorkoutLogEntry.COLUMN_GRADECODE, outputGradeCode); // int
+        valuesOut.put(DatabaseContract.WorkoutLogEntry.COLUMN_HOLDTYPE, outputHoldType); // int
+        valuesOut.put(DatabaseContract.WorkoutLogEntry.COLUMN_WALLANGLE, outputWallAngle); // int
+        valuesOut.put(DatabaseContract.WorkoutLogEntry.COLUMN_ISCOMPLETE, outputIsComplete); // int
+
+        long newRowId = database.insert(DatabaseContract.WorkoutLogEntry.TABLE_NAME, null, valuesOut);
+        database.close();
+        return newRowId;
+
+    }
+
     /**
      * Write a log to the calendar tracker app
      *

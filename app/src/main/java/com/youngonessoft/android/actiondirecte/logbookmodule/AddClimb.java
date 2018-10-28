@@ -144,12 +144,12 @@ public class AddClimb extends AppCompatActivity {
                 } else {
                     if (inputIntentCode == ADD_CLIMB_EDIT) {
                         long updateResult = DatabaseReadWrite.updateClimbLogData(outputRouteName, outputLocationName, outputAscent, outputGradeName, outputGradeNumber, outputDate, outputFirstAscent, inputRowID, AddClimb.this);
-                        Toast.makeText(getApplicationContext(), "Existing Row ID: " + String.valueOf(updateResult), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "Existing Row ID: " + String.valueOf(updateResult), Toast.LENGTH_SHORT).show();
                         finish();
                     } else if (inputIntentCode == ADD_CLIMB_NEW) {
                         long writeResult = DatabaseReadWrite.writeClimbLogData(outputRouteName, outputLocationName, outputAscent, outputGradeName, outputGradeNumber, outputDate, outputFirstAscent, AddClimb.this);
                         DatabaseReadWrite.writeCalendarUpdate(DatabaseContract.IS_CLIMB, outputDate, writeResult, AddClimb.this);
-                        Toast.makeText(getApplicationContext(), "New Row ID: " + String.valueOf(writeResult), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "New Row ID: " + String.valueOf(writeResult), Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 }

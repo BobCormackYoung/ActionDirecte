@@ -2,6 +2,8 @@ package com.youngonessoft.android.actiondirecte.logbookmodule;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -12,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.youngonessoft.android.actiondirecte.R;
+import com.youngonessoft.android.actiondirecte.data.DatabaseContract;
+import com.youngonessoft.android.actiondirecte.data.DatabaseHelper;
 import com.youngonessoft.android.actiondirecte.util.TimeUtils;
 
 import java.util.Calendar;
@@ -26,6 +30,7 @@ public class LogBook extends FragmentActivity {
     final int ADD_WORKOUT_NEW = 0;
     final int ADD_WORKOUT_EDIT = 1;
     private CachingFragmentStatePagerAdapter adapterViewPager;
+    final long DAYPERIOD = 86400000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +53,7 @@ public class LogBook extends FragmentActivity {
 
         // Set pager to current date
         vpPager.setCurrentItem(TimeUtils.getPositionForDay(currentDate));
-        Toast.makeText(getApplicationContext(), "Position = " + TimeUtils.getPositionForDay(currentDate), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "Position = " + TimeUtils.getPositionForDay(currentDate), Toast.LENGTH_SHORT).show();
 
         // Set PageChangeListener
         vpPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -63,7 +68,7 @@ public class LogBook extends FragmentActivity {
                 Calendar cal = TimeUtils.getDayForPosition(position);
                 TextView header = findViewById(R.id.textview_date);
                 header.setText(TimeUtils.getFormattedDate(mContext, cal.getTimeInMillis()));
-                Toast.makeText(getApplicationContext(), "Position = " + position, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Position = " + position, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -157,9 +162,33 @@ public class LogBook extends FragmentActivity {
                 Calendar cal = TimeUtils.getDayForPosition(position);
                 long date = cal.getTimeInMillis();
 
-                Intent CopyWorkoutIntent = new Intent(LogBook.this, CopyWorkout.class);
-                // Start the new activity
-                startActivity(CopyWorkoutIntent);
+                DatabaseHelper tempHandler = new DatabaseHelper(mContext);
+                SQLiteDatabase tempDatabase = tempHandler.getWritableDatabase();
+                Calendar tempCalendar = Calendar.getInstance();
+                tempCalendar.setTimeInMillis(date);
+                tempCalendar.set(Calendar.HOUR_OF_DAY, 0);
+                tempCalendar.set(Calendar.MINUTE, 0);
+                tempCalendar.set(Calendar.SECOND, 0);
+                tempCalendar.set(Calendar.MILLISECOND, 0);
+
+                long dayStart = tempCalendar.getTimeInMillis();
+                long dayEnd = dayStart + DAYPERIOD;
+
+                Cursor tempCursor = getCursorWorkoutsBetweenDates(dayStart, dayEnd, tempDatabase);
+
+                int cursorCount = tempCursor.getCount();
+                tempCursor.close();
+                tempDatabase.close();
+                tempHandler.close();
+
+                if (cursorCount == 0) {
+                    Toast.makeText(mContext, "No workouts to copy!", Toast.LENGTH_LONG).show();
+                } else {
+                    Intent CopyWorkoutIntent = new Intent(LogBook.this, CopyWorkout.class);
+                    CopyWorkoutIntent.putExtra("Date", date);
+                    // Start the new activity
+                    startActivity(CopyWorkoutIntent);
+                }
             }
         });
 
@@ -192,6 +221,28 @@ public class LogBook extends FragmentActivity {
         }
 
 
+    }
+
+    public Cursor getCursorWorkoutsBetweenDates(long dateStart, long dateEnd, SQLiteDatabase db) {
+
+        //grade type
+        String[] projection = {
+                DatabaseContract.CalendarTrackerEntry._ID,
+                DatabaseContract.CalendarTrackerEntry.COLUMN_ROWID,
+                DatabaseContract.CalendarTrackerEntry.COLUMN_DATE,
+                DatabaseContract.CalendarTrackerEntry.COLUMN_ISCLIMB};
+        String whereClause = DatabaseContract.CalendarTrackerEntry.COLUMN_ISCLIMB + "=? AND " + DatabaseContract.CalendarTrackerEntry.COLUMN_DATE + " BETWEEN ? AND ?";
+        String[] whereValue = {String.valueOf(DatabaseContract.IS_WORKOUT), String.valueOf(dateStart), String.valueOf(dateEnd)};
+
+        Cursor cursor = db.query(DatabaseContract.CalendarTrackerEntry.TABLE_NAME,
+                projection,
+                whereClause,
+                whereValue,
+                null,
+                null,
+                null);
+
+        return cursor;
     }
 
 }

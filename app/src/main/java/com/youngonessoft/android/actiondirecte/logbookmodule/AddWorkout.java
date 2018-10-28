@@ -340,7 +340,7 @@ public class AddWorkout extends AppCompatActivity {
                         long outputRow = DatabaseReadWrite.writeWorkoutLogData(outputDate, outputWorkoutName, outputWorkoutNumber, counterWeight, counterSetCount,
                                 counterRepCount, counterRepTime, counterRestTime, outputGradeName, outputGradeNumber, counterMoveCount, outputHoldType, counterWallAngle, outputCompleteCheckedState, AddWorkout.this);
                         DatabaseReadWrite.writeCalendarUpdate(DatabaseContract.IS_WORKOUT, outputDate, outputRow, AddWorkout.this);
-                        Toast.makeText(getApplicationContext(), "New Row ID: " + outputRow, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "New Row ID: " + outputRow, Toast.LENGTH_SHORT).show();
                         finish();
                     } else {
                         Toast.makeText(getApplicationContext(), "No workout type selected", Toast.LENGTH_SHORT).show();
@@ -348,7 +348,7 @@ public class AddWorkout extends AppCompatActivity {
                 } else if (inputIntentCode == ADD_WORKOUT_EDIT) {
                     long outputRow = DatabaseReadWrite.updateWorkoutLogData(outputDate, outputWorkoutName, outputWorkoutNumber, counterWeight, counterSetCount,
                             counterRepCount, counterRepTime, counterRestTime, outputGradeName, outputGradeNumber, counterMoveCount, outputHoldType, counterWallAngle, inputRowID, outputCompleteCheckedState, AddWorkout.this);
-                    Toast.makeText(getApplicationContext(), "New Row ID: " + outputRow, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "New Row ID: " + outputRow, Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }
@@ -408,10 +408,7 @@ public class AddWorkout extends AppCompatActivity {
                 if (outputWorkoutNumber == -1) {
                     // No workout selected
                     Log.i("CHRONO_LOG", "Option 1");
-                    CharSequence text = "No workout selected. Can't to save data!";
-                    int duration = Toast.LENGTH_SHORT;
-                    Toast toast = Toast.makeText(getApplicationContext(), text, duration);
-                    toast.show();
+                    Toast.makeText(getApplicationContext(), "No workout selected. Can't save data!", Toast.LENGTH_SHORT).show();
                 } else {
                     // Workout is selected
                     // Give different options for saving data depending on data required for workout

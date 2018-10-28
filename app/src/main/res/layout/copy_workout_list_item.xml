@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/cb_copy_workout_list_item"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:gravity="center"
+            android:layout_weight="0"/>
+
+        <TextView
+            android:id="@+id/tv_copy_workout_list_item"
+            android:layout_width="0dp"
+            android:layout_height="24dp"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/iv_copy_workout_expandable"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:gravity="center" />
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/ll_copyworkout_workoutdata"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="8dp">
+
+        <TextView
+            android:layout_width="36dp"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/ll_copyworkout_data1_wrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Rep x Set: "
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/tv_copyworkout_data1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5"
+                    android:text="dummy"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_copyworkout_data2_wrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Rep Duration: "
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/tv_copyworkout_data2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5"
+                    android:text="dummy"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_copyworkout_data3_wrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Rest per Set: "
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/tv_copyworkout_data3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5"
+                    android:text="dummy"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_copyworkout_data4_wrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Weight: "
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/tv_copyworkout_data4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5"
+                    android:text="dummy"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_copyworkout_data5_wrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Grade: "
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/tv_copyworkout_data5"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5"
+                    android:text="dummy"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_copyworkout_data6_wrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Move Count: "
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/tv_copyworkout_data6"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5"
+                    android:text="dummy"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_copyworkout_data7_wrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Wall Angle: "
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/tv_copyworkout_data7"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5"
+                    android:text="dummy"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_copyworkout_data8_wrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Hold Type: "
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/tv_copyworkout_data8"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5"
+                    android:text="dummy"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_copyworkout_data9_wrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Is Complete? "
+                    android:layout_weight="1"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_weight="2.5">
+
+                    <ImageView
+                        android:id="@+id/iv_copyworkout_data9"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
