@@ -315,13 +315,9 @@ public class CopyWorkout extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (copyWorkoutIsComplete.isChecked()){
-                    outputIsComplete = true;
-                } else {
-                    outputIsComplete = false;
-                }
+                outputIsComplete = copyWorkoutIsComplete.isChecked();
 
-                ArrayList<CopyWorkoutArrayItem> outputArrayList = listAdapter.getCopyWorkoutListAdapterCheckedStatus();
+                ArrayList<CheckedArrayItem> outputArrayList = listAdapter.getCopyWorkoutListAdapterCheckedStatus();
                 int outputArrayListSize = outputArrayList.size();
                 int checkCount = 0;
                 for (int iv=1; iv<outputArrayListSize; iv++) {
@@ -342,7 +338,7 @@ public class CopyWorkout extends AppCompatActivity {
                         // loop through array to copy items
                         for (int ii=1; ii<(singleDayOutputXTimes+1); ii++){
                             for (int i=0; i<outputArrayListSize; i++) {
-                                CopyWorkoutArrayItem temp = outputArrayList.get(i);
+                                CheckedArrayItem temp = outputArrayList.get(i);
                                 if (temp.getIsChecked()) {
                                     long newRowID = DatabaseReadWrite.copyWorkoutEntry(temp.getRowID(), singleDateOutput, outputIsComplete, mContext);
                                     long newRowIDCalendar = DatabaseReadWrite.writeCalendarUpdate(0, singleDateOutput, newRowID, mContext);
@@ -371,12 +367,11 @@ public class CopyWorkout extends AppCompatActivity {
                                 if (multipleDaysOutputArray[iii]){
                                     tempOutputCalendar.add(Calendar.DATE,iii);
                                     for (int iv=0; iv<outputArrayListSize; iv++) {
-                                        CopyWorkoutArrayItem temp = outputArrayList.get(iv);
+                                        CheckedArrayItem temp = outputArrayList.get(iv);
                                         if (temp.getIsChecked()) {
                                             long newRowID = DatabaseReadWrite.copyWorkoutEntry(temp.getRowID(), tempOutputCalendar.getTimeInMillis(), outputIsComplete, mContext);
                                             long newRowIDCalendar = DatabaseReadWrite.writeCalendarUpdate(0, tempOutputCalendar.getTimeInMillis(), newRowID, mContext);
                                             Log.i("CopyWorkout", "multiday "+iv+", "+multipleDaysOutputArray[iv]+", newRowID"+newRowID+", "+multipleDaysOutputEveryWeek+", "+multipleDaysOutputForWeeks+", "+TimeUtils.getFormattedDate(mContext, mCalendarStarting.getTimeInMillis()));
-                                        } else {
                                         }
                                     }
                                     if (iii==7){

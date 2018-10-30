@@ -1,11 +1,11 @@
 package com.youngonessoft.android.actiondirecte.logbookmodule;
 
-public class CopyWorkoutExpandedItem {
+public class ExpandedArrayItem {
 
     private int mRowID;
     private boolean mIsExpanded;
 
-    public CopyWorkoutExpandedItem(int rowID, boolean isExpanded) {
+    public ExpandedArrayItem(int rowID, boolean isExpanded) {
         mRowID = rowID;
         mIsExpanded = isExpanded;
     }

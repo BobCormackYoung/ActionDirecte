@@ -22,8 +22,8 @@ import java.util.ArrayList;
 public class CopyWorkoutListAdapter extends CursorAdapter {
 
     private Cursor cursor;
-    private ArrayList<CopyWorkoutArrayItem> itemChecked = new ArrayList<CopyWorkoutArrayItem>();
-    private ArrayList<CopyWorkoutExpandedItem> itemExpanded = new ArrayList<CopyWorkoutExpandedItem>();
+    private ArrayList<CheckedArrayItem> itemChecked = new ArrayList<CheckedArrayItem>();
+    private ArrayList<ExpandedArrayItem> itemExpanded = new ArrayList<ExpandedArrayItem>();
 
     public CopyWorkoutListAdapter(Context context, Cursor cursor) {
         super(context, cursor, 0);
@@ -31,8 +31,8 @@ public class CopyWorkoutListAdapter extends CursorAdapter {
         for (int i = 0; i < this.getCount(); i++) {
             cursor.moveToPosition(i);
             int rowID = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.CalendarTrackerEntry.COLUMN_ROWID));
-            itemChecked.add(i, new CopyWorkoutArrayItem(rowID,false)); // initializes all items value with false
-            itemExpanded.add(i, new CopyWorkoutExpandedItem(rowID,false)); // initializes all items value with false
+            itemChecked.add(i, new CheckedArrayItem(rowID, false)); // initializes all items value with false
+            itemExpanded.add(i, new ExpandedArrayItem(rowID, false)); // initializes all items value with false
         }
     }
 
@@ -47,7 +47,7 @@ public class CopyWorkoutListAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
 
         //map all views
-        TextView titleTextView = (TextView) view.findViewById(R.id.tv_copy_workout_list_item);
+        TextView titleTextView = view.findViewById(R.id.tv_copy_workout_list_item);
         final LinearLayout dataDisplayWrapper = view.findViewById(R.id.ll_copyworkout_workoutdata);
         final ImageView expandableArrow = view.findViewById(R.id.iv_copy_workout_expandable);
         CheckBox checkBox = view.findViewById(R.id.cb_copy_workout_list_item);
@@ -175,15 +175,6 @@ public class CopyWorkoutListAdapter extends CursorAdapter {
         }
 
 
-
-
-
-
-
-
-
-
-
         //need to hide the data display wrapper initially
         if (itemExpanded.get(pos).getIsExpanded()){
             dataDisplayWrapper.setVisibility(View.VISIBLE);
@@ -215,10 +206,10 @@ public class CopyWorkoutListAdapter extends CursorAdapter {
                 CheckBox cb = v.findViewById(R.id.cb_copy_workout_list_item);
 
                 if (cb.isChecked()) {
-                    itemChecked.set(pos, new CopyWorkoutArrayItem(rowID,true));
+                    itemChecked.set(pos, new CheckedArrayItem(rowID, true));
                     // do some operations here
                 } else if (!cb.isChecked()) {
-                    itemChecked.set(pos, new CopyWorkoutArrayItem(rowID,false));
+                    itemChecked.set(pos, new CheckedArrayItem(rowID, false));
                     // do some operations here
                 }
             }
@@ -228,7 +219,7 @@ public class CopyWorkoutListAdapter extends CursorAdapter {
 
     }
 
-    public ArrayList<CopyWorkoutArrayItem> getCopyWorkoutListAdapterCheckedStatus() {
+    public ArrayList<CheckedArrayItem> getCopyWorkoutListAdapterCheckedStatus() {
         return itemChecked;
     }
 
@@ -239,13 +230,13 @@ public class CopyWorkoutListAdapter extends CursorAdapter {
             //view.findViewById(R.id.ll_copyworkout_workoutdata).setVisibility(View.GONE);
             view.setVisibility(View.GONE);
             arrow.setImageResource(R.drawable.ic_baseline_expand_more_24px);
-            itemExpanded.set(pos, new CopyWorkoutExpandedItem(rowID,false));
+            itemExpanded.set(pos, new ExpandedArrayItem(rowID, false));
         } else if (!itemExpanded.get(pos).getIsExpanded()){
             //item is unexpanded, expand it
             //view.findViewById(R.id.ll_copyworkout_workoutdata).setVisibility(View.VISIBLE);
             view.setVisibility(View.VISIBLE);
             arrow.setImageResource(R.drawable.ic_baseline_expand_less_24px);
-            itemExpanded.set(pos, new CopyWorkoutExpandedItem(rowID,true));
+            itemExpanded.set(pos, new ExpandedArrayItem(rowID, true));
         }
 
     }

@@ -1,12 +1,12 @@
 package com.youngonessoft.android.actiondirecte.logbookmodule;
 
-public class CopyWorkoutArrayItem {
+public class CheckedArrayItem {
 
     private int mRowID;
     private boolean mIsChecked;
     private boolean mIsExpanded;
 
-    public CopyWorkoutArrayItem(int rowID, boolean isChecked) {
+    public CheckedArrayItem(int rowID, boolean isChecked) {
         mRowID = rowID;
         mIsChecked = isChecked;
     }

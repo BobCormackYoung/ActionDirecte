@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.android.anothertest.logbookmodule.LogBook">
+    tools:context="com.youngonessoft.android.actiondirecte.logbookmodule.LogBook">
 
     <LinearLayout
         android:id="@+id/layout_header"
@@ -32,6 +31,7 @@
                 android:layout_height="match_parent" />
 
             <ImageView
+                android:contentDescription="left button"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="4dp"
@@ -48,7 +48,7 @@
             android:layout_marginTop="8dp"
             android:background="#99000000"
             android:gravity="center"
-            android:textSize="18dp"
+            android:textSize="18sp"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
             tools:text="Display Date" />
@@ -67,6 +67,7 @@
                 android:layout_height="match_parent" />
 
             <ImageView
+                android:contentDescription="right button"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="4dp"
@@ -97,7 +98,7 @@
             android:layout_marginTop="4dp"
             android:text="Add Climb"
             style="@style/DarkMenuButtons"
-            android:textSize="16dp" />
+            android:textSize="16sp" />
 
         <LinearLayout
             android:id="@+id/wrapper_add_workout"
@@ -141,7 +142,8 @@
             android:id="@+id/log_book_viewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/divider_lower">
+            android:layout_above="@id/divider_lower"
+            android:padding="12dp">
 
         </android.support.v4.view.ViewPager>
 

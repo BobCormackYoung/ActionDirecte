@@ -90,7 +90,7 @@ public class LogBookFragmentContent extends Fragment {
             }
 
             adapter = new LogBookListAdapter(context, cursor);
-            ListView listView = (ListView) view.findViewById(R.id.log_book_list);
+            ListView listView = view.findViewById(R.id.log_book_list);
             listView.setAdapter(adapter);
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -105,7 +105,7 @@ public class LogBookFragmentContent extends Fragment {
                         Intent editClimbIntent = new Intent(context, AddClimb.class);
                         editClimbIntent.putExtra("EditOrNewFlag", ITEM_EDIT);
                         editClimbIntent.putExtra("RowID", childRowID);
-                        editClimbIntent.putExtra("Date", (long) fragmentDate);
+                        editClimbIntent.putExtra("Date", fragmentDate);
                         // Start the new activity
                         Log.i("TAG ME UP", "OnItemClick " + (int) id + " " + ITEM_EDIT + " " + fragmentDate);
                         startActivity(editClimbIntent);
@@ -113,7 +113,7 @@ public class LogBookFragmentContent extends Fragment {
                         Intent editWorkoutIntent = new Intent(context, AddWorkout.class);
                         editWorkoutIntent.putExtra("EditOrNewFlag", ITEM_EDIT);
                         editWorkoutIntent.putExtra("RowID", childRowID);
-                        editWorkoutIntent.putExtra("Date", (long) fragmentDate);
+                        editWorkoutIntent.putExtra("Date", fragmentDate);
                         // Start the new activity
                         Log.i("TAG ME UP", "OnItemClick " + (int) id + " " + ITEM_EDIT + " " + fragmentDate);
                         startActivity(editWorkoutIntent);
@@ -161,8 +161,7 @@ public class LogBookFragmentContent extends Fragment {
     }
 
     public Cursor getCursorBetweenDates(long dateStart, long dateEnd, SQLiteDatabase db) {
-        Cursor cursor = db.rawQuery("select * from " + DatabaseContract.CalendarTrackerEntry.TABLE_NAME + " where " + DatabaseContract.CalendarTrackerEntry.COLUMN_DATE + " BETWEEN '" + dateStart + "' AND '" + dateEnd + "' ORDER BY Date ASC", null);
-        return cursor;
+        return db.rawQuery("select * from " + DatabaseContract.CalendarTrackerEntry.TABLE_NAME + " where " + DatabaseContract.CalendarTrackerEntry.COLUMN_DATE + " BETWEEN '" + dateStart + "' AND '" + dateEnd + "' ORDER BY Date ASC", null);
     }
 
     public AlertDialog.Builder deleteDialog(final long id) {
@@ -219,6 +218,13 @@ public class LogBookFragmentContent extends Fragment {
         long dayEnd = dayStart + DAYPERIOD;
         cursor.close();
         cursor = getCursorBetweenDates(dayStart, dayEnd, database);
+
+        // referencing static variable... is this okay?
+        for (int i = 0; i < cursor.getCount(); i++) {
+            cursor.moveToPosition(i);
+            int rowID = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.CalendarTrackerEntry.COLUMN_ROWID));
+            LogBookListAdapter.itemExpanded.add(i, new ExpandedArrayItem(rowID, false)); // initializes all items value with false
+        }
         adapter.changeCursor(cursor);
     }
 
