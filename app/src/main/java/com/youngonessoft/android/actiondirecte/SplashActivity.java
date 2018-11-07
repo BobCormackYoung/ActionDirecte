@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import com.youngonessoft.android.actiondirecte.calendarmodule.CalendarOverview;
 import com.youngonessoft.android.actiondirecte.data.DatabaseHelper;
 import com.youngonessoft.android.actiondirecte.logbookmodule.LogBook;
+import com.youngonessoft.android.actiondirecte.analysismodule.AnalysisActivity;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -20,8 +21,6 @@ public class SplashActivity extends AppCompatActivity {
 
     public static final String LOG_TAG = "SplashActivity";
     final int BACKGROUND_COUNT = 5;
-
-
 
     /** Database helper that will provide us access to the database */
     private DatabaseHelper mDbHelper;
@@ -81,9 +80,9 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Create a new intent to open the {@link FamilyActivity}
-                Intent DailyViewIntent = new Intent(SplashActivity.this, LogBook.class);
+                Intent analysisViewIntent = new Intent(SplashActivity.this, AnalysisActivity.class);
                 // Start the new activity
-                startActivity(DailyViewIntent);
+                startActivity(analysisViewIntent);
             }
         });
 

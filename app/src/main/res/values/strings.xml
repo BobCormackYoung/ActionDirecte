@@ -7,4 +7,11 @@
     <string name="app_title_text_b">Directe</string>
     <string name="app_subtitle_text">The Climbing Training App</string>
     <string name="date_format">yyyy-MM-dd</string>
+    <string name="title_activity_analysis">analysisActivity</string>
+    <string name="tab_text_1">Climbing</string>
+    <string name="tab_text_2">Training</string>
+    <string name="tab_text_3">Graph</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="tab_text_4">Map</string>
 </resources>

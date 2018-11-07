@@ -13,6 +13,7 @@
         android:orientation="horizontal">
 
         <ImageView
+            android:contentDescription="Log book list item icon image"
             android:id="@+id/log_book_list_item_icon_image"
             android:layout_width="36dp"
             android:layout_height="36dp"

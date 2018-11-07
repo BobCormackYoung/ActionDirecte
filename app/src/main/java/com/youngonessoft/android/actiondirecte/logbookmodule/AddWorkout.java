@@ -221,7 +221,7 @@ public class AddWorkout extends AppCompatActivity {
 
     private void mapViews() {
         // Title wrapper
-        titleWrapper = findViewById(R.id.pageTitle);
+        //titleWrapper = findViewById(R.id.pageTitle);
 
         // Chronometer
         chronometerWrapper = findViewById(R.id.chronometerWrapper);

@@ -6,9 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +22,7 @@ import java.util.Calendar;
 
 //TODO: Still appears to be a bug when calling position of pager adapter for specific date
 
-public class LogBook extends FragmentActivity {
+public class LogBook extends AppCompatActivity {
 
     private static Context mContext;
     final int ADD_CLIMB_NEW = 0;
@@ -47,7 +47,7 @@ public class LogBook extends FragmentActivity {
         header.setText(TimeUtils.convertDate(outputDate, "yyyy-MM-dd"));
 
         // Initialise viewPager
-        final ViewPager vpPager = (ViewPager) findViewById(R.id.log_book_viewpager);
+        final ViewPager vpPager = findViewById(R.id.log_book_viewpager);
         adapterViewPager = new MyPagerAdapter(getSupportFragmentManager());
         vpPager.setAdapter(adapterViewPager);
 

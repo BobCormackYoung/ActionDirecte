@@ -31,7 +31,7 @@ public class ParentWorkoutHolder extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.parent_list);
+        setContentView(R.layout.listview_parent_list);
 
         Log.i(TAG, "ParentWorkoutHolder_1");
 
@@ -46,7 +46,7 @@ public class ParentWorkoutHolder extends AppCompatActivity {
 
         ParentWorkoutAdapter parentAdapter = new ParentWorkoutAdapter(this, cursor);
 
-        ListView parentListView = (ListView) findViewById(R.id.parent_listview);
+        ListView parentListView = findViewById(R.id.parent_listview);
 
         parentListView.setAdapter(parentAdapter);
 

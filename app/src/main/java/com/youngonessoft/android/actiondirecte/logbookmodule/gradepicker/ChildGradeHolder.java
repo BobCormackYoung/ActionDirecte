@@ -28,7 +28,7 @@ public class ChildGradeHolder extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.child_list);
+        setContentView(R.layout.listview_child_list);
 
         Intent selectorIntent = getIntent();
         int selectorID = selectorIntent.getIntExtra("selector", 0);
@@ -44,7 +44,7 @@ public class ChildGradeHolder extends AppCompatActivity {
 
         ChildGradeAdapter childAdapter = new ChildGradeAdapter(this, cursor);
 
-        ListView childListView = (ListView) findViewById(R.id.child_list);
+        ListView childListView = findViewById(R.id.child_list);
 
         childListView.setAdapter(childAdapter);
 

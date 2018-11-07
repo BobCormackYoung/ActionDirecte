@@ -22,8 +22,8 @@ import java.util.ArrayList;
 public class CopyWorkoutListAdapter extends CursorAdapter {
 
     private Cursor cursor;
-    private ArrayList<CheckedArrayItem> itemChecked = new ArrayList<CheckedArrayItem>();
-    private ArrayList<ExpandedArrayItem> itemExpanded = new ArrayList<ExpandedArrayItem>();
+    private ArrayList<CheckedArrayItem> itemChecked = new ArrayList<>();
+    private ArrayList<ExpandedArrayItem> itemExpanded = new ArrayList<>();
 
     public CopyWorkoutListAdapter(Context context, Cursor cursor) {
         super(context, cursor, 0);
@@ -40,7 +40,7 @@ public class CopyWorkoutListAdapter extends CursorAdapter {
     // you don't bind any data to the view at this point.
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        return LayoutInflater.from(context).inflate(R.layout.copy_workout_list_item, parent, false);
+        return LayoutInflater.from(context).inflate(R.layout.listview_item_copy_workout, parent, false);
     }
 
     @Override

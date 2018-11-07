@@ -27,7 +27,7 @@ public class AscentHolder extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.parent_list);
+        setContentView(R.layout.listview_parent_list);
 
         //Create handler to connect to SQLite DB
         DatabaseHelper handler = new DatabaseHelper(this);
@@ -37,7 +37,7 @@ public class AscentHolder extends AppCompatActivity {
 
         AscentAdapter parentAdapter = new AscentAdapter(this, cursor);
 
-        ListView parentListView = (ListView) findViewById(R.id.parent_listview);
+        ListView parentListView = findViewById(R.id.parent_listview);
 
         parentListView.setAdapter(parentAdapter);
 

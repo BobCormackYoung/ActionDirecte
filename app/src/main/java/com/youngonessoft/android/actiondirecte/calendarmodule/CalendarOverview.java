@@ -80,7 +80,7 @@ public class CalendarOverview extends AppCompatActivity {
         mCalendarProperties.setCalendarSize(CALENDAR_SIZE);
         mCalendarProperties.setInitialPosition(CALENDAR_MID_PAGE);
         mCalendarProperties.setDisplayedPosition(mCurrentPage);
-        mCalendarProperties.setItemLayoutResource(R.layout.calendar_day_layout);
+        mCalendarProperties.setItemLayoutResource(R.layout.gridview_item_calendar_day);
 
         mViewPager = findViewById(R.id.vp_calendar); //find the viewpager
         mCalendarPagerAdapter = new CalendarPagerAdapter(mContext, mCalendarProperties); //create the new pageradapter

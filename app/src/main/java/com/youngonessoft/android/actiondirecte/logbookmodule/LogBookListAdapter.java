@@ -28,7 +28,7 @@ public class LogBookListAdapter extends CursorAdapter {
     Context mContext;
 
     // static variables are bad, is there a workaround?
-    public static ArrayList<ExpandedArrayItem> itemExpanded = new ArrayList<ExpandedArrayItem>();
+    public static ArrayList<ExpandedArrayItem> itemExpanded = new ArrayList<>();
     private Cursor cursor;
 
     public LogBookListAdapter(Context context, Cursor cursor) {
@@ -45,7 +45,7 @@ public class LogBookListAdapter extends CursorAdapter {
     // you don't bind any data to the view at this point.
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        return LayoutInflater.from(context).inflate(R.layout.log_book_list_item, parent, false);
+        return LayoutInflater.from(context).inflate(R.layout.listview_item_log_book, parent, false);
     }
 
     @Override

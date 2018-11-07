@@ -25,7 +25,7 @@ public class ChildGradeAdapter extends CursorAdapter {
     // you don't bind any data to the view at this point.
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        return LayoutInflater.from(context).inflate(R.layout.list_item, parent, false);
+        return LayoutInflater.from(context).inflate(R.layout.listview_item_nodescription, parent, false);
     }
 
     // The bindView method is used to bind all data to a given view
@@ -33,7 +33,7 @@ public class ChildGradeAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         // Find fields to populate in inflated template
-        TextView listItemText = (TextView) view.findViewById(R.id.list_item_text);
+        TextView listItemText = view.findViewById(R.id.list_item_text);
         // Extract properties from cursor
         String body = cursor.getString(cursor.getColumnIndexOrThrow(GradeListEntry.COLUMN_GRADENAME));
         // Populate fields with extracted properties

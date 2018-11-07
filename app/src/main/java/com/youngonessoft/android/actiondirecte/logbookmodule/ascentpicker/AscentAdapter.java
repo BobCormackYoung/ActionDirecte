@@ -28,7 +28,7 @@ public class AscentAdapter extends CursorAdapter {
     // you don't bind any data to the view at this point.
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        return LayoutInflater.from(context).inflate(R.layout.list_item_desc, parent, false);
+        return LayoutInflater.from(context).inflate(R.layout.listview_item_description, parent, false);
     }
 
     // The bindView method is used to bind all data to a given view
@@ -36,7 +36,7 @@ public class AscentAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, final Cursor cursor) {
         // Find fields to populate in inflated template
-        final TextView listItemText = (TextView) view.findViewById(R.id.list_item_desc_text);
+        final TextView listItemText = view.findViewById(R.id.list_item_desc_text);
         // Extract properties from cursor
         String body = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.AscentEntry.COLUMN_ASCENTTYPENAME));
         // Populate fields with extracted properties

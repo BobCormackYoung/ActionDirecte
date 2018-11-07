@@ -56,7 +56,7 @@ public class CalendarPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mGridView = (GridView) inflater.inflate(R.layout.calendar_gridview, null);
+        mGridView = (GridView) inflater.inflate(R.layout.gridview_calendar, null);
 
         //mGridView.setOnItemClickListener(new DayRowClickListener(this, mContext, mCalendarProperties));
 
@@ -67,7 +67,7 @@ public class CalendarPagerAdapter extends PagerAdapter {
     }
 
     public void loadMonth(int position) {
-        ArrayList<MonthDays> monthDays = new ArrayList<MonthDays>();
+        ArrayList<MonthDays> monthDays = new ArrayList<>();
 
         // Get Calendar object instance
         Calendar calendar = (Calendar) mCalendarProperties.getCurrentDate().clone();
