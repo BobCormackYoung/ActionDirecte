@@ -23,11 +23,12 @@ import com.youngonessoft.android.actiondirecte.R;
 public class MapAnalysisFragment extends Fragment {
 
     private static final int TWO_MINUTES = 1000 * 60 * 2;
-    private static final String[] LOCATION_PERMS = {Manifest.permission.ACCESS_FINE_LOCATION};
-    private static final int LOCATION_REQUEST = 1337;
     Context mContext;
     TextView longitudeValueGPS, latitudeValueGPS;
     Double longitudeGPS, latitudeGPS;
+
+    private static final String[] LOCATION_PERMS = {Manifest.permission.ACCESS_FINE_LOCATION};
+    private static final int LOCATION_REQUEST = 1337;
     LocationManager locationManager;
     LocationListener locationListener;
     String locationProvider;

@@ -1,5 +1,7 @@
 package com.youngonessoft.android.actiondirecte;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -8,10 +10,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.youngonessoft.android.actiondirecte.analysismodule.AnalysisActivity;
 import com.youngonessoft.android.actiondirecte.calendarmodule.CalendarOverview;
 import com.youngonessoft.android.actiondirecte.data.DatabaseHelper;
 import com.youngonessoft.android.actiondirecte.logbookmodule.LogBook;
-import com.youngonessoft.android.actiondirecte.analysismodule.AnalysisActivity;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -24,11 +26,15 @@ public class SplashActivity extends AppCompatActivity {
 
     /** Database helper that will provide us access to the database */
     private DatabaseHelper mDbHelper;
-
+    private static final String[] LOCATION_PERMS = {Manifest.permission.ACCESS_FINE_LOCATION};
+    private static final int LOCATION_REQUEST = 1337;
+    Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mContext = this;
 
         getSupportActionBar().hide();
 

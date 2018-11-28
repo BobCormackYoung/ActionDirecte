@@ -52,7 +52,10 @@ public class DatabaseReadWrite {
                 DatabaseContract.ClimbLogEntry.COLUMN_ASCENTTYPECODE,
                 DatabaseContract.ClimbLogEntry.COLUMN_LOCATION,
                 DatabaseContract.ClimbLogEntry.COLUMN_FIRSTASCENTCODE,
-                DatabaseContract.ClimbLogEntry.COLUMN_ISCLIMB};
+                DatabaseContract.ClimbLogEntry.COLUMN_ISCLIMB,
+                DatabaseContract.ClimbLogEntry.COLUMN_ISGPS,
+                DatabaseContract.ClimbLogEntry.COLUMN_GPSLATITUDE,
+                DatabaseContract.ClimbLogEntry.COLUMN_GPSLONGITUDE};
         String whereClause = DatabaseContract.ClimbLogEntry._ID + "=?";
         String[] whereValue = {String.valueOf(inputRowID)};
 
@@ -94,6 +97,18 @@ public class DatabaseReadWrite {
             idColumnOutput = cursor.getColumnIndex(DatabaseContract.ClimbLogEntry.COLUMN_ASCENTTYPECODE);
             int outputAscent = cursor.getInt(idColumnOutput);
 
+            // Get gps code type
+            idColumnOutput = cursor.getColumnIndex(DatabaseContract.ClimbLogEntry.COLUMN_ISGPS);
+            int outputGpsCode = cursor.getInt(idColumnOutput);
+
+            // Get get latitude type
+            idColumnOutput = cursor.getColumnIndex(DatabaseContract.ClimbLogEntry.COLUMN_GPSLATITUDE);
+            double outputLatitude = cursor.getDouble(idColumnOutput);
+
+            // Get get longitude type
+            idColumnOutput = cursor.getColumnIndex(DatabaseContract.ClimbLogEntry.COLUMN_GPSLONGITUDE);
+            double outputLongitude = cursor.getDouble(idColumnOutput);
+
             outputBundle.putString("outputRouteName", outputRouteName);
             outputBundle.putString("outputLocationName", outputLocationName);
             outputBundle.putLong("outputDate", outputDate);
@@ -102,6 +117,9 @@ public class DatabaseReadWrite {
             outputBundle.putInt("outputGradeNumber", outputGradeNumber);
             outputBundle.putInt("outputGradeName", outputGradeName);
             outputBundle.putInt("outputAscent", outputAscent);
+            outputBundle.putInt("outputGpsCode", outputGpsCode);
+            outputBundle.putDouble("outputLatitude", outputLatitude);
+            outputBundle.putDouble("outputLongitude", outputLongitude);
 
             return outputBundle;
 
@@ -398,7 +416,7 @@ public class DatabaseReadWrite {
      * @param mContext     Context context
      * @return the row ID that has been added
      */
-    public static long writeClimbLogData(String routeName, String locationName, int ascentType, int gradeType, int gradeNumber, long date, int firstAscent, Context mContext) {
+    public static long writeClimbLogData(String routeName, String locationName, int ascentType, int gradeType, int gradeNumber, long date, int firstAscent, int gpsCode, double latitude, double longitude, Context mContext) {
         // Gets the database in write mode
         //Create handler to connect to SQLite DB
         DatabaseHelper handler = new DatabaseHelper(mContext);
@@ -414,6 +432,10 @@ public class DatabaseReadWrite {
         values.put(DatabaseContract.ClimbLogEntry.COLUMN_LOCATION, locationName);
         values.put(DatabaseContract.ClimbLogEntry.COLUMN_FIRSTASCENTCODE, firstAscent);
         values.put(DatabaseContract.ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        values.put(DatabaseContract.ClimbLogEntry.COLUMN_ISGPS, gpsCode);
+        values.put(DatabaseContract.ClimbLogEntry.COLUMN_GPSLATITUDE, latitude);
+        values.put(DatabaseContract.ClimbLogEntry.COLUMN_GPSLONGITUDE, longitude);
+
 
         long newRowId = database.insert(DatabaseContract.ClimbLogEntry.TABLE_NAME, null, values);
         database.close();
@@ -435,7 +457,7 @@ public class DatabaseReadWrite {
      * @param mContext     Context context
      * @return the row ID that has been edited
      */
-    public static long updateClimbLogData(String routeName, String locationName, int ascentType, int gradeType, int gradeNumber, long date, int firstAscent, int rowID, Context mContext) {
+    public static long updateClimbLogData(String routeName, String locationName, int ascentType, int gradeType, int gradeNumber, long date, int firstAscent, int gpsCode, double latitude, double longitude, int rowID, Context mContext) {
 
         // Gets the database in write mode
         //Create handler to connect to SQLite DB
@@ -452,6 +474,9 @@ public class DatabaseReadWrite {
         values.put(DatabaseContract.ClimbLogEntry.COLUMN_LOCATION, locationName);
         values.put(DatabaseContract.ClimbLogEntry.COLUMN_FIRSTASCENTCODE, firstAscent);
         values.put(DatabaseContract.ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        values.put(DatabaseContract.ClimbLogEntry.COLUMN_ISGPS, gpsCode);
+        values.put(DatabaseContract.ClimbLogEntry.COLUMN_GPSLATITUDE, latitude);
+        values.put(DatabaseContract.ClimbLogEntry.COLUMN_GPSLONGITUDE, longitude);
 
         String whereClauseFive = DatabaseContract.ClimbLogEntry._ID + "=?";
         String[] whereValueFive = {String.valueOf(rowID)};
@@ -645,7 +670,7 @@ public class DatabaseReadWrite {
      * @param gradeTypeCode   int
      * @param gradeCode       int
      * @param mContext        Context
-     * @return
+     * @return long newRowID
      */
     public static long writeWorkoutLogData(long date, int workoutTypeCode, int workoutCode, double weight, int setCount, int repCount, int repDuration, int restDuration, int gradeTypeCode, int gradeCode, int moveCount, int holdType, int wallAngle, int isComplete, Context mContext) {
         // Gets the database in write mode
@@ -692,7 +717,7 @@ public class DatabaseReadWrite {
      * @param gradeTypeCode   int
      * @param gradeCode       int
      * @param mContext        Context
-     * @return
+     * @return long newRowID
      */
     public static long updateWorkoutLogData(long date, int workoutTypeCode, int workoutCode, double weight, int setCount, int repCount, int repDuration, int restDuration, int gradeTypeCode, int gradeCode, int moveCount, int holdType, int wallAngle, int rowID, int isComplete, Context mContext) {
         // Gets the database in write mode
@@ -726,6 +751,7 @@ public class DatabaseReadWrite {
         return newRowId;
 
     }
+
 
     public static long copyWorkoutEntry(int inputRowID, long newDate, boolean copyAsComplete, Context mContext) {
 
@@ -844,7 +870,7 @@ public class DatabaseReadWrite {
      * @param outputDate long date
      * @param rowID      int rowID that we want to reference in the climb/training log
      * @param mContext   context
-     * @return
+     * @return long newRowID
      */
     public static long writeCalendarUpdate(int isTrue, long outputDate, long rowID, Context mContext) {
         // Gets the database in write mode
@@ -865,10 +891,6 @@ public class DatabaseReadWrite {
 
     /**
      * Get the child table row ID for a specific calendar entry
-     *
-     * @param id
-     * @param mContext
-     * @return
      */
     public static int getCalendarTrackerChildRowID(long id, Context mContext) {
         DatabaseHelper handler = new DatabaseHelper(mContext);
@@ -902,10 +924,6 @@ public class DatabaseReadWrite {
 
     /**
      * Return the boolean value for whether the calender tracker item is a climb or not
-     *
-     * @param id
-     * @param mContext
-     * @return
      */
     public static int getCalendarTrackerIsClimb(long id, Context mContext) {
         DatabaseHelper handler = new DatabaseHelper(mContext);
@@ -1232,10 +1250,6 @@ public class DatabaseReadWrite {
 
     /**
      * Method for outputting a list of days with climb data
-     *
-     * @param day
-     * @param mContext
-     * @return
      */
     public static ArrayList<Integer> getClimbMonthCount(Calendar day, Context mContext) {
         DatabaseHelper handler = new DatabaseHelper(mContext);
@@ -1299,10 +1313,6 @@ public class DatabaseReadWrite {
 
     /**
      * Method for outputting a list of days with workout data
-     *
-     * @param day
-     * @param mContext
-     * @return
      */
     public static ArrayList<Integer> getWorkoutMonthCount(Calendar day, Context mContext) {
         DatabaseHelper handler = new DatabaseHelper(mContext);
@@ -1366,10 +1376,6 @@ public class DatabaseReadWrite {
 
     /**
      * Method for outputting a list of days with workout climb data
-     *
-     * @param day
-     * @param mContext
-     * @return
      */
     public static ArrayList<Integer> getWorkoutClimbMonthCount(Calendar day, Context mContext) {
         DatabaseHelper handler = new DatabaseHelper(mContext);

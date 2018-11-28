@@ -69,6 +69,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_CALENDERTRACKER_TABLE);
 
         // Create a String that contains the SQL statement to create the climb log table
+        Log.i(LOG_TAG, "Creating new Climb Log table");
         String SQL_CREATE_CLIMBLOG_TABLE = "CREATE TABLE " + ClimbLogEntry.TABLE_NAME + " ("
                 + ClimbLogEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, "
                 + ClimbLogEntry.COLUMN_DATE + " INTEGER NOT NULL, "
@@ -78,7 +79,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + ClimbLogEntry.COLUMN_ASCENTTYPECODE + " INTEGER, "
                 + ClimbLogEntry.COLUMN_LOCATION + " TEXT, "
                 + ClimbLogEntry.COLUMN_FIRSTASCENTCODE + " INTEGER, "
-                + ClimbLogEntry.COLUMN_ISCLIMB + " INTEGER);";
+                + ClimbLogEntry.COLUMN_ISCLIMB + " INTEGER, "
+                + ClimbLogEntry.COLUMN_ISGPS + " INTEGER, "
+                + ClimbLogEntry.COLUMN_GPSLATITUDE + " REAL, "
+                + ClimbLogEntry.COLUMN_GPSLONGITUDE + " REAL);";
 
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_CLIMBLOG_TABLE);
@@ -1952,6 +1956,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(ClimbLogEntry.COLUMN_LOCATION, "Frankenjura");
         values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
         values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        values.put(ClimbLogEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_TRUE);
+        values.put(ClimbLogEntry.COLUMN_GPSLATITUDE, 54.34295257719445);
+        values.put(ClimbLogEntry.COLUMN_GPSLONGITUDE, -1.776307589148928);
         long writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
         values.clear();
         ContentValues values2 = new ContentValues();
@@ -1970,6 +1977,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(ClimbLogEntry.COLUMN_LOCATION, "Flatanger");
         values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
         values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        values.put(ClimbLogEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_TRUE);
+        values.put(ClimbLogEntry.COLUMN_GPSLATITUDE, 53.34295257719445);
+        values.put(ClimbLogEntry.COLUMN_GPSLONGITUDE, -1.776307589148928);
         writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
         values.clear();
         values2 = new ContentValues();
@@ -1989,6 +1999,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(ClimbLogEntry.COLUMN_LOCATION, "Arco");
         values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
         values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        values.put(ClimbLogEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_FALSE);
+        values.put(ClimbLogEntry.COLUMN_GPSLATITUDE, 0);
+        values.put(ClimbLogEntry.COLUMN_GPSLONGITUDE, 0);
         writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
         values.clear();
         values2 = new ContentValues();
@@ -2007,6 +2020,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(ClimbLogEntry.COLUMN_LOCATION, "Domusnovas");
         values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
         values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        values.put(ClimbLogEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_FALSE);
+        values.put(ClimbLogEntry.COLUMN_GPSLATITUDE, 0);
+        values.put(ClimbLogEntry.COLUMN_GPSLONGITUDE, 0);
         writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
         values.clear();
         values2 = new ContentValues();
@@ -2026,6 +2042,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(ClimbLogEntry.COLUMN_LOCATION, "Villanueva del Rosario");
         values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
         values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        values.put(ClimbLogEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_FALSE);
+        values.put(ClimbLogEntry.COLUMN_GPSLATITUDE, 0);
+        values.put(ClimbLogEntry.COLUMN_GPSLONGITUDE, 0);
         writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
         values.clear();
         values2 = new ContentValues();
@@ -2044,6 +2063,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(ClimbLogEntry.COLUMN_LOCATION, "Oliana");
         values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
         values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        values.put(ClimbLogEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_FALSE);
+        values.put(ClimbLogEntry.COLUMN_GPSLATITUDE, 0);
+        values.put(ClimbLogEntry.COLUMN_GPSLONGITUDE, 0);
         writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
         values.clear();
         values2 = new ContentValues();
@@ -2063,6 +2085,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(ClimbLogEntry.COLUMN_LOCATION, "Stanage");
         values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
         values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        values.put(ClimbLogEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_TRUE);
+        values.put(ClimbLogEntry.COLUMN_GPSLATITUDE, 49.465508445786284);
+        values.put(ClimbLogEntry.COLUMN_GPSLONGITUDE, 16.246916115916292);
         writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
         values.clear();
         values2 = new ContentValues();
@@ -2081,6 +2106,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(ClimbLogEntry.COLUMN_LOCATION, "Siurana");
         values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
         values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        values.put(ClimbLogEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_TRUE);
+        values.put(ClimbLogEntry.COLUMN_GPSLATITUDE, 50.465508445786284);
+        values.put(ClimbLogEntry.COLUMN_GPSLONGITUDE, 16.246916115916292);
         writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
         values.clear();
         values2 = new ContentValues();
@@ -2100,6 +2128,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(ClimbLogEntry.COLUMN_LOCATION, "La Cova de l'Ocell");
         values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
         values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        values.put(ClimbLogEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_TRUE);
+        values.put(ClimbLogEntry.COLUMN_GPSLATITUDE, 51.465508445786284);
+        values.put(ClimbLogEntry.COLUMN_GPSLONGITUDE, 16.246916115916292);
         writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
         values.clear();
         values2 = new ContentValues();
@@ -2118,6 +2149,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(ClimbLogEntry.COLUMN_LOCATION, "Margalef");
         values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
         values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        values.put(ClimbLogEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_TRUE);
+        values.put(ClimbLogEntry.COLUMN_GPSLATITUDE, 52.465508445786284);
+        values.put(ClimbLogEntry.COLUMN_GPSLONGITUDE, 16.246916115916292);
         writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
         values.clear();
         values2 = new ContentValues();

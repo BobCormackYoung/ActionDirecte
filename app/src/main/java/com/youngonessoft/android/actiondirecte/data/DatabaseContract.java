@@ -19,6 +19,8 @@ public final class DatabaseContract {
     public final static int IS_TRUE_REQUIRED = 1;
     public final static int IS_TRUE_NOTREQUIRED = 2;
     public final static int IS_FALSE = 0;
+    public final static int IS_GPS_TRUE = 1;
+    public final static int IS_GPS_FALSE = 0;
 
     private DatabaseContract() {}
 
@@ -56,6 +58,9 @@ public final class DatabaseContract {
         public final static String COLUMN_LOCATION = "Location";
         public final static String COLUMN_FIRSTASCENTCODE = "FirstAscentCode";
         public final static String COLUMN_ISCLIMB = "IsClimbCode";
+        public final static String COLUMN_ISGPS = "IsGpsCode";
+        public final static String COLUMN_GPSLATITUDE = "GpsLatitude";
+        public final static String COLUMN_GPSLONGITUDE = "GpsLongitude";
 
     }
 

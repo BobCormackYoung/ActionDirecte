@@ -58,15 +58,18 @@ public class LogBookListAdapter extends CursorAdapter {
         TextView titleIconText = view.findViewById(R.id.trophy_text);
         final ImageView expandableArrow = view.findViewById(R.id.iv_logbook_expand);
         final LinearLayout dataDisplayWrapper = view.findViewById(R.id.ll_alldata_wrapper);
+
         final LinearLayout dataClimbingDisplayWrapper = view.findViewById(R.id.ll_logbook_climbing_data_wrapper);
         LinearLayout dataClimbingWrapper1 = view.findViewById(R.id.ll_logbook_climbing_data1_wrapper);
         LinearLayout dataClimbingWrapper2 = view.findViewById(R.id.ll_logbook_climbing_data2_wrapper);
         LinearLayout dataClimbingWrapper3 = view.findViewById(R.id.ll_logbook_climbing_data3_wrapper);
         LinearLayout dataClimbingWrapper4 = view.findViewById(R.id.ll_logbook_climbing_data4_wrapper);
+        LinearLayout dataClimbingWrapper5 = view.findViewById(R.id.ll_logbook_climbing_data5_wrapper);
         TextView dataClimbingValue1 = view.findViewById(R.id.tv_logbook_climbing_data1);
         TextView dataClimbingValue2 = view.findViewById(R.id.tv_logbook_climbing_data2);
         TextView dataClimbingValue3 = view.findViewById(R.id.tv_logbook_climbing_data3);
         ImageView dataClimbingValue4 = view.findViewById(R.id.iv_logbook_climbing_data4);
+        ImageView dataClimbingValue5 = view.findViewById(R.id.iv_logbook_climbing_data5);
 
         final LinearLayout dataWorkoutDisplayWrapper = view.findViewById(R.id.ll_logbook_workout_data_wrapper);
         LinearLayout dataWorkoutWrapper1 = view.findViewById(R.id.ll_logbook_workout_data1_wrapper);
@@ -127,6 +130,12 @@ public class LogBookListAdapter extends CursorAdapter {
                 view.findViewById(R.id.trophy_icon).setVisibility(View.GONE);
                 view.findViewById(R.id.trophy_text).setVisibility(View.GONE);
                 dataClimbingValue4.setImageResource(R.drawable.ic_baseline_check_box_unchecked_24px);
+            }
+            int gpsCode = climbingDataBundle.getInt("outputGpsCode");
+            if (gpsCode == DatabaseContract.IS_GPS_TRUE) {
+                dataClimbingValue5.setImageResource(R.drawable.ic_baseline_check_box_checked_24px);
+            } else {
+                dataClimbingValue5.setImageResource(R.drawable.ic_baseline_check_box_unchecked_24px);
             }
 
             itemDivider.setBackgroundColor(ContextCompat.getColor(context, R.color.colorClimbingItemsV2));

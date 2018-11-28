@@ -95,6 +95,63 @@
                         style="@style/EditTextFocusableEditableNonClickable"
                         android:hint="Enter Location" />
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/bt_getGps"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Get GPS" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="76dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="Latitude:" />
+
+                                <TextView
+                                    android:id="@+id/tv_latitude"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    tools:text="XX.XXXX" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="76dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="Longitude:" />
+
+                                <TextView
+                                    android:id="@+id/tv_longitude"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    tools:text="XX.XXXX" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
                 <LinearLayout
