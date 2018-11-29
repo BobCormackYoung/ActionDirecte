@@ -319,10 +319,13 @@ public class CopyWorkout extends AppCompatActivity {
 
                 ArrayList<CheckedArrayItem> outputArrayList = listAdapter.getCopyWorkoutListAdapterCheckedStatus();
                 int outputArrayListSize = outputArrayList.size();
+                Log.i("CopyWorkout", "outputArrayListSize = " + outputArrayListSize);
                 int checkCount = 0;
-                for (int iv=1; iv<outputArrayListSize; iv++) {
+                for (int iv = 0; iv < outputArrayListSize; iv++) {
+                    Log.i("CopyWorkout", "outputArrayList > counter = " + iv);
                     if (outputArrayList.get(iv).getIsChecked()){
                         checkCount++;
+                        Log.i("CopyWorkout", "outputArrayList > checkcount = " + checkCount);
                     }
                 }
 
