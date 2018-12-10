@@ -131,6 +131,40 @@ public class DatabaseReadWrite {
     }
 
     /**
+     * Get a cursor with the climbs that have GPS data
+     */
+    public static Cursor GpsClimbLoadData(SQLiteDatabase db) {
+
+        SQLiteDatabase database = db;
+
+        String[] projection = {
+                DatabaseContract.ClimbLogEntry._ID,
+                DatabaseContract.ClimbLogEntry.COLUMN_DATE,
+                DatabaseContract.ClimbLogEntry.COLUMN_NAME,
+                DatabaseContract.ClimbLogEntry.COLUMN_GRADETYPECODE,
+                DatabaseContract.ClimbLogEntry.COLUMN_GRADECODE,
+                DatabaseContract.ClimbLogEntry.COLUMN_ASCENTTYPECODE,
+                DatabaseContract.ClimbLogEntry.COLUMN_LOCATION,
+                DatabaseContract.ClimbLogEntry.COLUMN_FIRSTASCENTCODE,
+                DatabaseContract.ClimbLogEntry.COLUMN_ISCLIMB,
+                DatabaseContract.ClimbLogEntry.COLUMN_ISGPS,
+                DatabaseContract.ClimbLogEntry.COLUMN_GPSLATITUDE,
+                DatabaseContract.ClimbLogEntry.COLUMN_GPSLONGITUDE};
+        String whereClause = DatabaseContract.ClimbLogEntry.COLUMN_ISGPS + "=?";
+        String[] whereValue = {String.valueOf(DatabaseContract.IS_GPS_TRUE)};
+
+        Cursor cursor = database.query(DatabaseContract.ClimbLogEntry.TABLE_NAME,
+                projection,
+                whereClause,
+                whereValue,
+                null,
+                null,
+                null);
+
+        return cursor;
+    }
+
+    /**
      * Get the position in the ViewPager for a given day
      *
      * @param inputRowID the row that needs to be read from the database

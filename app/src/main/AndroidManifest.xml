@@ -20,10 +20,10 @@
             android:theme="@style/FullscreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".calendarmodule.CalendarOverview"
             android:label="Calendar"
@@ -32,7 +32,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.youngonessoft.android.actiondirecte.SplashActivity" />
         </activity>
-
         <activity
             android:name=".logbookmodule.LogBook"
             android:label="Log Book"
@@ -41,27 +40,21 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.youngonessoft.android.actiondirecte.SplashActivity" />
         </activity>
-
         <activity
             android:name=".logbookmodule.AddClimb"
             android:label="Add Climb" />
-
         <activity android:name=".logbookmodule.gradepicker.ChildGradeHolder" />
         <activity android:name=".logbookmodule.gradepicker.ParentGradeHolder" />
         <activity android:name=".logbookmodule.ascentpicker.AscentHolder" />
         <activity android:name=".logbookmodule.holdtypepicker.HoldTypeHolder" />
-
         <activity
             android:name=".logbookmodule.AddWorkout"
             android:label="Add Workout" />
-
         <activity android:name=".logbookmodule.workoutpicker.ParentWorkoutHolder" />
         <activity android:name=".logbookmodule.workoutpicker.ChildWorkoutHolder" />
-
         <activity
             android:name=".logbookmodule.CopyWorkout"
             android:label="Copy Workout" />
-
         <activity
             android:name=".analysismodule.AnalysisActivity"
             android:label="@string/title_activity_analysis"
@@ -71,6 +64,18 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.youngonessoft.android.actiondirecte.SplashActivity" />
         </activity>
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
     </application>
 
 </manifest>
