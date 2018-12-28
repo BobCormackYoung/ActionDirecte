@@ -15,10 +15,8 @@ import com.youngonessoft.android.actiondirecte.calendarmodule.CalendarOverview;
 import com.youngonessoft.android.actiondirecte.data.DatabaseHelper;
 import com.youngonessoft.android.actiondirecte.logbookmodule.LogBook;
 
-/**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- */
+//TODO: Add license for https://github.com/PhilJay/MPAndroidChart#licence, http://www.apache.org/licenses/LICENSE-2.0
+
 public class SplashActivity extends AppCompatActivity {
 
     public static final String LOG_TAG = "SplashActivity";
