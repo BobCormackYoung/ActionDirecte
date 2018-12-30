@@ -55,6 +55,7 @@ public class AddClimb extends AppCompatActivity {
     int outputGradeNumber = -1;
     int outputGradeName = -1;
     int outputAscent = -1;
+    int outputLocationId;
     String outputLocationName = null;
     String outputRouteName = null;
     String outputDateString = null;
@@ -131,13 +132,15 @@ public class AddClimb extends AppCompatActivity {
 
             // Load climb log data for a specific row ID
             Bundle bundle = DatabaseReadWrite.EditClimbLoadEntry(inputRowID, this);
+            outputLocationId = bundle.getInt("outputLocationId");
+            Bundle locationDataBundle = DatabaseReadWrite.LocationLoadEntry(outputLocationId, this);
 
             EditText routeNameView = findViewById(R.id.editText);
             outputRouteName = bundle.getString("outputRouteName");
             routeNameView.setText(outputRouteName);
 
             EditText locationNameView = findViewById(R.id.editText2);
-            outputLocationName = bundle.getString("outputLocationName");
+            outputLocationName = locationDataBundle.getString("outputLocationName");
             locationNameView.setText(outputLocationName);
 
             EditText dateView = findViewById(R.id.editText5);
@@ -169,13 +172,13 @@ public class AddClimb extends AppCompatActivity {
             ascentTypeView.setText(outputStringAscentType);
 
             // Set GPS data
-            outputHasGps = bundle.getInt("outputGpsCode");
+            outputHasGps = locationDataBundle.getInt("outputIsGps");
             TextView textViewLatitude = findViewById(R.id.tv_latitude);
             TextView textViewLongitude = findViewById(R.id.tv_longitude);
             if (outputHasGps == DatabaseContract.IS_GPS_TRUE) {
-                outputLatitude = bundle.getDouble("outputLatitude");
+                outputLatitude = locationDataBundle.getDouble("outputGpsLatitude");
                 textViewLatitude.setText("" + outputLatitude);
-                outputLongitude = bundle.getDouble("outputLongitude");
+                outputLongitude = locationDataBundle.getDouble("outputGpsLongitude");
                 textViewLongitude.setText("" + outputLongitude);
             } else {
                 textViewLatitude.setText("No data");
@@ -243,11 +246,15 @@ public class AddClimb extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Insufficient information - please ensure all fields are filled", Toast.LENGTH_SHORT).show();
                 } else {
                     if (inputIntentCode == ADD_CLIMB_EDIT) {
-                        long updateResult = DatabaseReadWrite.updateClimbLogData(outputRouteName, outputLocationName, outputAscent, outputGradeName, outputGradeNumber, outputDate, outputFirstAscent, outputHasGps, outputLatitude, outputLongitude, inputRowID, AddClimb.this);
+                        long updateResult = DatabaseReadWrite.updateClimbLogData(outputRouteName, outputLocationName, outputAscent,
+                                outputGradeName, outputGradeNumber, outputDate, outputFirstAscent, outputHasGps, outputLatitude,
+                                outputLongitude, inputRowID, AddClimb.this);
                         //Toast.makeText(getApplicationContext(), "Existing Row ID: " + String.valueOf(updateResult), Toast.LENGTH_SHORT).show();
                         finish();
                     } else if (inputIntentCode == ADD_CLIMB_NEW) {
-                        long writeResult = DatabaseReadWrite.writeClimbLogData(outputRouteName, outputLocationName, outputAscent, outputGradeName, outputGradeNumber, outputDate, outputFirstAscent, outputHasGps, outputLatitude, outputLongitude, AddClimb.this);
+                        long writeResult = DatabaseReadWrite.writeClimbLogData(outputRouteName, outputLocationName, outputAscent,
+                                outputGradeName, outputGradeNumber, outputDate, outputFirstAscent, outputHasGps, outputLatitude,
+                                outputLongitude, AddClimb.this);
                         DatabaseReadWrite.writeCalendarUpdate(DatabaseContract.IS_CLIMB, outputDate, writeResult, AddClimb.this);
                         //Toast.makeText(getApplicationContext(), "New Row ID: " + String.valueOf(writeResult), Toast.LENGTH_SHORT).show();
                         finish();

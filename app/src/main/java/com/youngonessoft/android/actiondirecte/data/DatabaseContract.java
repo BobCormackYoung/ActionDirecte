@@ -58,9 +58,9 @@ public final class DatabaseContract {
         public final static String COLUMN_LOCATION = "Location";
         public final static String COLUMN_FIRSTASCENTCODE = "FirstAscentCode";
         public final static String COLUMN_ISCLIMB = "IsClimbCode";
-        public final static String COLUMN_ISGPS = "IsGpsCode";
-        public final static String COLUMN_GPSLATITUDE = "GpsLatitude";
-        public final static String COLUMN_GPSLONGITUDE = "GpsLongitude";
+        //public final static String COLUMN_ISGPS = "IsGpsCode"; REMOVE
+        //public final static String COLUMN_GPSLATITUDE = "GpsLatitude"; REMOVE
+        //public final static String COLUMN_GPSLONGITUDE = "GpsLongitude"; REMOVE
 
     }
 
@@ -148,5 +148,17 @@ public final class DatabaseContract {
 
     }
 
+    public final static class LocationListEntry implements BaseColumns {
+
+        public final static String TABLE_NAME = "LocationList";
+
+        public final static String _ID = BaseColumns._ID;
+        public final static String COLUMN_LOCATIONNAME = "LocationName";
+        public final static String COLUMN_CLIMBCOUNT = "ClimbCount";
+        public final static String COLUMN_GPSLATITUDE = "GpsLatitude";
+        public final static String COLUMN_GPSLONGITUDE = "GpsLongitude";
+        public final static String COLUMN_ISGPS = "IsGps";
+
+    }
 
 }

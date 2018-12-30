@@ -115,11 +115,14 @@ public class LogBookListAdapter extends CursorAdapter {
             dataClimbingDisplayWrapper.setVisibility(View.VISIBLE);
             dataWorkoutDisplayWrapper.setVisibility(View.GONE);
 
-            Bundle climbingDataBundle = DatabaseReadWrite.EditClimbLoadEntry(rowID, context);
+            Bundle climbingDataBundle = DatabaseReadWrite.EditClimbLoadEntry(rowID, context); // Updated
+            int locationId = climbingDataBundle.getInt("outputLocationId"); // Updated
+            Bundle locationDataBundle = DatabaseReadWrite.LocationLoadEntry(locationId, context); // Updated
+
             titleTextView.setText(climbingDataBundle.getString("outputRouteName"));
             subtitleTextView.setText(DatabaseReadWrite.getGradeTypeClimb(climbingDataBundle.getInt("outputGradeName"), context) + " | " + DatabaseReadWrite.getGradeTextClimb(climbingDataBundle.getInt("outputGradeNumber"), context));
             dataClimbingValue1.setText(DatabaseReadWrite.getGradeTypeClimb(climbingDataBundle.getInt("outputGradeName"), context) + " | " + DatabaseReadWrite.getGradeTextClimb(climbingDataBundle.getInt("outputGradeNumber"), context));
-            dataClimbingValue2.setText(climbingDataBundle.getString("outputLocationName"));
+            dataClimbingValue2.setText(locationDataBundle.getString("outputLocationName")); // Updated
             dataClimbingValue3.setText(DatabaseReadWrite.getAscentNameTextClimb(climbingDataBundle.getInt("outputAscent"), context));
             int firstAscentCode = climbingDataBundle.getInt("outputFirstAscent");
             if (firstAscentCode == DatabaseContract.FIRSTASCENT_TRUE) {
@@ -131,7 +134,7 @@ public class LogBookListAdapter extends CursorAdapter {
                 view.findViewById(R.id.trophy_text).setVisibility(View.GONE);
                 dataClimbingValue4.setImageResource(R.drawable.ic_baseline_check_box_unchecked_24px);
             }
-            int gpsCode = climbingDataBundle.getInt("outputGpsCode");
+            int gpsCode = locationDataBundle.getInt("outputIsGps"); // Updated
             if (gpsCode == DatabaseContract.IS_GPS_TRUE) {
                 dataClimbingValue5.setImageResource(R.drawable.ic_baseline_check_box_checked_24px);
             } else {

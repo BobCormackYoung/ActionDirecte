@@ -152,9 +152,12 @@ public class MapAnalysisFragment extends Fragment {
 
         int idColumnOutput;
         String outputRouteName;
+        int outputLocationId;
+        Bundle locationDataBundle;
         String outputLocationName;
         Long outputDate;
         String outputDateString;
+        int outputIsGps;
         int outputFirstAscent;
         int outputGradeNumber;
         int outputGradeName;
@@ -168,6 +171,7 @@ public class MapAnalysisFragment extends Fragment {
         latLngDoubleArray[3] = -999; // Max Long
 
 
+        //TODO: Add functionaliy for multiple climbs for a single location marker
         int i = 0;
         while (i < cursor.getCount()) {
             cursor.moveToPosition(i);
@@ -178,7 +182,9 @@ public class MapAnalysisFragment extends Fragment {
 
             // Get and set  location name
             idColumnOutput = cursor.getColumnIndex(DatabaseContract.ClimbLogEntry.COLUMN_LOCATION);
-            outputLocationName = cursor.getString(idColumnOutput);
+            outputLocationId = cursor.getInt(idColumnOutput); // Updated
+            locationDataBundle = DatabaseReadWrite.LocationLoadEntry(outputLocationId, getContext()); // Updated
+            outputLocationName = locationDataBundle.getString("outputLocationName"); // Updated
 
             // Get date
             idColumnOutput = cursor.getColumnIndex(DatabaseContract.ClimbLogEntry.COLUMN_DATE);
@@ -200,35 +206,35 @@ public class MapAnalysisFragment extends Fragment {
             idColumnOutput = cursor.getColumnIndex(DatabaseContract.ClimbLogEntry.COLUMN_ASCENTTYPECODE);
             outputAscent = cursor.getInt(idColumnOutput);
 
-            // Get get latitude type
-            idColumnOutput = cursor.getColumnIndex(DatabaseContract.ClimbLogEntry.COLUMN_GPSLATITUDE);
-            outputLatitude = cursor.getDouble(idColumnOutput);
-
-            // Get get longitude type
-            idColumnOutput = cursor.getColumnIndex(DatabaseContract.ClimbLogEntry.COLUMN_GPSLONGITUDE);
-            outputLongitude = cursor.getDouble(idColumnOutput);
+            // Get GPS info
+            outputIsGps = locationDataBundle.getInt("outputIsGps"); // Updated
+            outputLatitude = locationDataBundle.getDouble("outputGpsLatitude"); // Updated
+            outputLongitude = locationDataBundle.getDouble("outputGpsLongitude"); // Updated
 
             String outputSnippetString = outputLocationName + " \n" + outputDateString + " \n" + outputGradeText;
 
-            mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(outputLatitude, outputLongitude))
-                    .title(outputRouteName)
-                    .snippet(outputSnippetString));
+            // Check whether GPS data exists for plotting, and create marker if does
+            if (outputIsGps == DatabaseContract.IS_GPS_TRUE) {
+                mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(outputLatitude, outputLongitude))
+                        .title(outputRouteName)
+                        .snippet(outputSnippetString));
 
-            if (outputLatitude < latLngDoubleArray[0]) {
-                latLngDoubleArray[0] = outputLatitude;
-            }
+                if (outputLatitude < latLngDoubleArray[0]) {
+                    latLngDoubleArray[0] = outputLatitude;
+                }
 
-            if (outputLongitude < latLngDoubleArray[1]) {
-                latLngDoubleArray[1] = outputLongitude;
-            }
+                if (outputLongitude < latLngDoubleArray[1]) {
+                    latLngDoubleArray[1] = outputLongitude;
+                }
 
-            if (outputLatitude > latLngDoubleArray[2]) {
-                latLngDoubleArray[2] = outputLatitude;
-            }
+                if (outputLatitude > latLngDoubleArray[2]) {
+                    latLngDoubleArray[2] = outputLatitude;
+                }
 
-            if (outputLongitude > latLngDoubleArray[3]) {
-                latLngDoubleArray[3] = outputLongitude;
+                if (outputLongitude > latLngDoubleArray[3]) {
+                    latLngDoubleArray[3] = outputLongitude;
+                }
             }
 
             i++;

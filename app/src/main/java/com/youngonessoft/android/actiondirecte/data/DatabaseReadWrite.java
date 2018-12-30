@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -52,10 +53,7 @@ public class DatabaseReadWrite {
                 DatabaseContract.ClimbLogEntry.COLUMN_ASCENTTYPECODE,
                 DatabaseContract.ClimbLogEntry.COLUMN_LOCATION,
                 DatabaseContract.ClimbLogEntry.COLUMN_FIRSTASCENTCODE,
-                DatabaseContract.ClimbLogEntry.COLUMN_ISCLIMB,
-                DatabaseContract.ClimbLogEntry.COLUMN_ISGPS,
-                DatabaseContract.ClimbLogEntry.COLUMN_GPSLATITUDE,
-                DatabaseContract.ClimbLogEntry.COLUMN_GPSLONGITUDE};
+                DatabaseContract.ClimbLogEntry.COLUMN_ISCLIMB};
         String whereClause = DatabaseContract.ClimbLogEntry._ID + "=?";
         String[] whereValue = {String.valueOf(inputRowID)};
 
@@ -76,7 +74,7 @@ public class DatabaseReadWrite {
 
             // Get and set  location name
             idColumnOutput = cursor.getColumnIndex(DatabaseContract.ClimbLogEntry.COLUMN_LOCATION);
-            String outputLocationName = cursor.getString(idColumnOutput);
+            int outputLocationId = cursor.getInt(idColumnOutput);
 
             // Get date
             idColumnOutput = cursor.getColumnIndex(DatabaseContract.ClimbLogEntry.COLUMN_DATE);
@@ -97,29 +95,78 @@ public class DatabaseReadWrite {
             idColumnOutput = cursor.getColumnIndex(DatabaseContract.ClimbLogEntry.COLUMN_ASCENTTYPECODE);
             int outputAscent = cursor.getInt(idColumnOutput);
 
-            // Get gps code type
-            idColumnOutput = cursor.getColumnIndex(DatabaseContract.ClimbLogEntry.COLUMN_ISGPS);
-            int outputGpsCode = cursor.getInt(idColumnOutput);
-
-            // Get get latitude type
-            idColumnOutput = cursor.getColumnIndex(DatabaseContract.ClimbLogEntry.COLUMN_GPSLATITUDE);
-            double outputLatitude = cursor.getDouble(idColumnOutput);
-
-            // Get get longitude type
-            idColumnOutput = cursor.getColumnIndex(DatabaseContract.ClimbLogEntry.COLUMN_GPSLONGITUDE);
-            double outputLongitude = cursor.getDouble(idColumnOutput);
-
             outputBundle.putString("outputRouteName", outputRouteName);
-            outputBundle.putString("outputLocationName", outputLocationName);
+            outputBundle.putInt("outputLocationId", outputLocationId);
             outputBundle.putLong("outputDate", outputDate);
             outputBundle.putString("outputDateString", outputDateString);
             outputBundle.putInt("outputFirstAscent", outputFirstAscent);
             outputBundle.putInt("outputGradeNumber", outputGradeNumber);
             outputBundle.putInt("outputGradeName", outputGradeName);
             outputBundle.putInt("outputAscent", outputAscent);
-            outputBundle.putInt("outputGpsCode", outputGpsCode);
-            outputBundle.putDouble("outputLatitude", outputLatitude);
-            outputBundle.putDouble("outputLongitude", outputLongitude);
+
+            return outputBundle;
+
+        } finally {
+            cursor.close();
+            database.close();
+        }
+
+    }
+
+    public static Bundle LocationLoadEntry(int inputRowID, Context mContext) {
+
+        Bundle outputBundle = new Bundle();
+
+        DatabaseHelper handler = new DatabaseHelper(mContext);
+        SQLiteDatabase database = handler.getWritableDatabase();
+
+        String[] projection = {
+                DatabaseContract.LocationListEntry._ID,
+                DatabaseContract.LocationListEntry.COLUMN_LOCATIONNAME,
+                DatabaseContract.LocationListEntry.COLUMN_CLIMBCOUNT,
+                DatabaseContract.LocationListEntry.COLUMN_ISGPS,
+                DatabaseContract.LocationListEntry.COLUMN_GPSLATITUDE,
+                DatabaseContract.LocationListEntry.COLUMN_GPSLONGITUDE};
+        String whereClause = DatabaseContract.ClimbLogEntry._ID + "=?";
+        String[] whereValue = {String.valueOf(inputRowID)};
+
+        Cursor cursor = database.query(DatabaseContract.LocationListEntry.TABLE_NAME,
+                projection,
+                whereClause,
+                whereValue,
+                null,
+                null,
+                null);
+
+        try {
+            cursor.moveToFirst();
+
+            // Get location name
+            int idColumnOutput = cursor.getColumnIndex(DatabaseContract.LocationListEntry.COLUMN_LOCATIONNAME);
+            String outputLocationName = cursor.getString(idColumnOutput);
+
+            // Get climb count
+            idColumnOutput = cursor.getColumnIndex(DatabaseContract.LocationListEntry.COLUMN_CLIMBCOUNT);
+            int outputClimbCount = cursor.getInt(idColumnOutput);
+
+            // Get whether has GPS
+            idColumnOutput = cursor.getColumnIndex(DatabaseContract.LocationListEntry.COLUMN_ISGPS);
+            int outputIsGps = cursor.getInt(idColumnOutput);
+
+            // Get latitude
+            idColumnOutput = cursor.getColumnIndex(DatabaseContract.LocationListEntry.COLUMN_GPSLATITUDE);
+            double outputGpsLatitude = cursor.getDouble(idColumnOutput);
+
+            // Get longitude
+            idColumnOutput = cursor.getColumnIndex(DatabaseContract.LocationListEntry.COLUMN_GPSLONGITUDE);
+            double outputGpsLongitude = cursor.getDouble(idColumnOutput);
+
+
+            outputBundle.putString("outputLocationName", outputLocationName);
+            outputBundle.putInt("outputClimbCount", outputClimbCount);
+            outputBundle.putInt("outputIsGps", outputIsGps);
+            outputBundle.putDouble("outputGpsLatitude", outputGpsLatitude);
+            outputBundle.putDouble("outputGpsLongitude", outputGpsLongitude);
 
             return outputBundle;
 
@@ -146,20 +193,17 @@ public class DatabaseReadWrite {
                 DatabaseContract.ClimbLogEntry.COLUMN_ASCENTTYPECODE,
                 DatabaseContract.ClimbLogEntry.COLUMN_LOCATION,
                 DatabaseContract.ClimbLogEntry.COLUMN_FIRSTASCENTCODE,
-                DatabaseContract.ClimbLogEntry.COLUMN_ISCLIMB,
-                DatabaseContract.ClimbLogEntry.COLUMN_ISGPS,
-                DatabaseContract.ClimbLogEntry.COLUMN_GPSLATITUDE,
-                DatabaseContract.ClimbLogEntry.COLUMN_GPSLONGITUDE};
-        String whereClause = DatabaseContract.ClimbLogEntry.COLUMN_ISGPS + "=?";
-        String[] whereValue = {String.valueOf(DatabaseContract.IS_GPS_TRUE)};
+                DatabaseContract.ClimbLogEntry.COLUMN_ISCLIMB};
+        //String whereClause = DatabaseContract.ClimbLogEntry.COLUMN_ISGPS + "=?";
+        //String[] whereValue = {String.valueOf(DatabaseContract.IS_GPS_TRUE)};
 
         Cursor cursor = database.query(DatabaseContract.ClimbLogEntry.TABLE_NAME,
                 projection,
-                whereClause,
-                whereValue,
                 null,
                 null,
-                null);
+                null,
+                null,
+                null); //TODO: Mod the "orderBy" or order by location ID
 
         return cursor;
     }
@@ -451,10 +495,20 @@ public class DatabaseReadWrite {
      * @return the row ID that has been added
      */
     public static long writeClimbLogData(String routeName, String locationName, int ascentType, int gradeType, int gradeNumber, long date, int firstAscent, int gpsCode, double latitude, double longitude, Context mContext) {
+        //TODO: Add functionality for increasing climb count at location of interest
+
         // Gets the database in write mode
         //Create handler to connect to SQLite DB
         DatabaseHelper handler = new DatabaseHelper(mContext);
         SQLiteDatabase database = handler.getWritableDatabase();
+
+        ContentValues locationValues = new ContentValues(); // Updated
+        locationValues.put(DatabaseContract.LocationListEntry.COLUMN_LOCATIONNAME, locationName); // Updated
+        locationValues.put(DatabaseContract.LocationListEntry.COLUMN_CLIMBCOUNT, 1); // Updated
+        locationValues.put(DatabaseContract.LocationListEntry.COLUMN_ISGPS, gpsCode); // Updated
+        locationValues.put(DatabaseContract.LocationListEntry.COLUMN_GPSLATITUDE, latitude); // Updated
+        locationValues.put(DatabaseContract.LocationListEntry.COLUMN_GPSLONGITUDE, longitude); // Updated
+        long newLocationRowId = database.insert(DatabaseContract.LocationListEntry.TABLE_NAME, null, locationValues);
 
         // Create a ContentValues object where column names are the keys,
         ContentValues values = new ContentValues();
@@ -463,13 +517,9 @@ public class DatabaseReadWrite {
         values.put(DatabaseContract.ClimbLogEntry.COLUMN_GRADETYPECODE, gradeType);
         values.put(DatabaseContract.ClimbLogEntry.COLUMN_GRADECODE, gradeNumber);
         values.put(DatabaseContract.ClimbLogEntry.COLUMN_ASCENTTYPECODE, ascentType);
-        values.put(DatabaseContract.ClimbLogEntry.COLUMN_LOCATION, locationName);
+        values.put(DatabaseContract.ClimbLogEntry.COLUMN_LOCATION, (int) newLocationRowId);
         values.put(DatabaseContract.ClimbLogEntry.COLUMN_FIRSTASCENTCODE, firstAscent);
         values.put(DatabaseContract.ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
-        values.put(DatabaseContract.ClimbLogEntry.COLUMN_ISGPS, gpsCode);
-        values.put(DatabaseContract.ClimbLogEntry.COLUMN_GPSLATITUDE, latitude);
-        values.put(DatabaseContract.ClimbLogEntry.COLUMN_GPSLONGITUDE, longitude);
-
 
         long newRowId = database.insert(DatabaseContract.ClimbLogEntry.TABLE_NAME, null, values);
         database.close();
@@ -498,6 +548,48 @@ public class DatabaseReadWrite {
         DatabaseHelper handler = new DatabaseHelper(mContext);
         SQLiteDatabase database = handler.getWritableDatabase();
 
+        // Load existing location data
+        Bundle climbDataBundle = EditClimbLoadEntry(rowID, mContext);
+        int locationId = climbDataBundle.getInt("outputLocationId");
+        Bundle locationDataBundle = LocationLoadEntry(locationId, mContext);
+        int locationIsGpsCurrent = locationDataBundle.getInt("outputIsGps");
+        String locationNameCurrent = locationDataBundle.getString("outputLocationName");
+
+        //Check if updated location name is the same as old
+        if (locationName.equals(locationNameCurrent)) {
+            Log.i("DBRW", "locationName.equals(locationNameCurrent) = true");
+            // check if existing has no GPS and whether GPS is being saved
+            if (locationIsGpsCurrent == DatabaseContract.IS_GPS_FALSE && gpsCode == DatabaseContract.IS_GPS_TRUE) {
+                Log.i("DBRW", "locationIsGpsCurrent == DatabaseContract.IS_GPS_FALSE && gpsCode == DatabaseContract.IS_GPS_TRUE = true");
+                // If "yes", update location data
+                ContentValues updatedLocationValues = new ContentValues();
+                updatedLocationValues.put(DatabaseContract.LocationListEntry.COLUMN_LOCATIONNAME, locationName); // Updated
+                updatedLocationValues.put(DatabaseContract.LocationListEntry.COLUMN_CLIMBCOUNT, 1); // Updated
+                updatedLocationValues.put(DatabaseContract.LocationListEntry.COLUMN_ISGPS, gpsCode); // Updated
+                updatedLocationValues.put(DatabaseContract.LocationListEntry.COLUMN_GPSLATITUDE, latitude); // Updated
+                updatedLocationValues.put(DatabaseContract.LocationListEntry.COLUMN_GPSLONGITUDE, longitude); // Updated
+                String whereClause = DatabaseContract.LocationListEntry._ID + "=?";
+                String[] whereValue = {String.valueOf(locationId)};
+                database.update(DatabaseContract.LocationListEntry.TABLE_NAME, updatedLocationValues, whereClause, whereValue);
+
+            } else if (locationIsGpsCurrent == DatabaseContract.IS_GPS_TRUE && gpsCode == DatabaseContract.IS_GPS_TRUE) {
+                Log.i("DBRW", "locationIsGpsCurrent == DatabaseContract.IS_GPS_TRUE && gpsCode == DatabaseContract.IS_GPS_TRUE = true");
+                // warn user that will not overwrite existing saved GPS data
+                Toast.makeText(mContext, "GPS data already stored will not be overwritten.", Toast.LENGTH_SHORT).show();
+                //TODO: give the user a choice about whether they want to overwrite the data or not
+            }
+        } else {
+            Log.i("DBRW", "locationName.equals(locationNameCurrent) = false");
+            // if "no", create a new location entry and update the locationId
+            ContentValues newLocationValues = new ContentValues(); // Updated
+            newLocationValues.put(DatabaseContract.LocationListEntry.COLUMN_LOCATIONNAME, locationName); // Updated
+            newLocationValues.put(DatabaseContract.LocationListEntry.COLUMN_CLIMBCOUNT, 1); // Updated
+            newLocationValues.put(DatabaseContract.LocationListEntry.COLUMN_ISGPS, gpsCode); // Updated
+            newLocationValues.put(DatabaseContract.LocationListEntry.COLUMN_GPSLATITUDE, latitude); // Updated
+            newLocationValues.put(DatabaseContract.LocationListEntry.COLUMN_GPSLONGITUDE, longitude); // Updated
+            locationId = (int) database.insert(DatabaseContract.LocationListEntry.TABLE_NAME, null, newLocationValues);
+        }
+
         // Create a ContentValues object where column names are the keys,
         ContentValues values = new ContentValues();
         values.put(DatabaseContract.ClimbLogEntry.COLUMN_DATE, date);
@@ -505,12 +597,9 @@ public class DatabaseReadWrite {
         values.put(DatabaseContract.ClimbLogEntry.COLUMN_GRADETYPECODE, gradeType);
         values.put(DatabaseContract.ClimbLogEntry.COLUMN_GRADECODE, gradeNumber);
         values.put(DatabaseContract.ClimbLogEntry.COLUMN_ASCENTTYPECODE, ascentType);
-        values.put(DatabaseContract.ClimbLogEntry.COLUMN_LOCATION, locationName);
+        values.put(DatabaseContract.ClimbLogEntry.COLUMN_LOCATION, locationId);
         values.put(DatabaseContract.ClimbLogEntry.COLUMN_FIRSTASCENTCODE, firstAscent);
         values.put(DatabaseContract.ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
-        values.put(DatabaseContract.ClimbLogEntry.COLUMN_ISGPS, gpsCode);
-        values.put(DatabaseContract.ClimbLogEntry.COLUMN_GPSLATITUDE, latitude);
-        values.put(DatabaseContract.ClimbLogEntry.COLUMN_GPSLONGITUDE, longitude);
 
         String whereClauseFive = DatabaseContract.ClimbLogEntry._ID + "=?";
         String[] whereValueFive = {String.valueOf(rowID)};

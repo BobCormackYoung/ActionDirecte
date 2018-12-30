@@ -11,10 +11,11 @@ import com.youngonessoft.android.actiondirecte.data.DatabaseContract.CalendarTra
 import com.youngonessoft.android.actiondirecte.data.DatabaseContract.ClimbLogEntry;
 import com.youngonessoft.android.actiondirecte.data.DatabaseContract.GradeListEntry;
 import com.youngonessoft.android.actiondirecte.data.DatabaseContract.GradeTypeEntry;
+import com.youngonessoft.android.actiondirecte.data.DatabaseContract.HoldTypeEntry;
 import com.youngonessoft.android.actiondirecte.data.DatabaseContract.WorkoutListEntry;
 import com.youngonessoft.android.actiondirecte.data.DatabaseContract.WorkoutLogEntry;
 import com.youngonessoft.android.actiondirecte.data.DatabaseContract.WorkoutTypeEntry;
-import com.youngonessoft.android.actiondirecte.data.DatabaseContract.HoldTypeEntry;
+import com.youngonessoft.android.actiondirecte.data.DatabaseContract.LocationListEntry;
 
 import java.util.Calendar;
 
@@ -77,12 +78,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + ClimbLogEntry.COLUMN_GRADETYPECODE + " INTEGER, "
                 + ClimbLogEntry.COLUMN_GRADECODE + " INTEGER, "
                 + ClimbLogEntry.COLUMN_ASCENTTYPECODE + " INTEGER, "
-                + ClimbLogEntry.COLUMN_LOCATION + " TEXT, "
+                + ClimbLogEntry.COLUMN_LOCATION + " INTEGER, "
                 + ClimbLogEntry.COLUMN_FIRSTASCENTCODE + " INTEGER, "
-                + ClimbLogEntry.COLUMN_ISCLIMB + " INTEGER, "
-                + ClimbLogEntry.COLUMN_ISGPS + " INTEGER, "
-                + ClimbLogEntry.COLUMN_GPSLATITUDE + " REAL, "
-                + ClimbLogEntry.COLUMN_GPSLONGITUDE + " REAL);";
+                + ClimbLogEntry.COLUMN_ISCLIMB + " INTEGER);";
 
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_CLIMBLOG_TABLE);
@@ -165,6 +163,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_HOLDTYPE_TABLE);
 
+        // Create a String that contains the SQL statement to create the climb log table
+        String SQL_CREATE_LOCATION_TABLE = "CREATE TABLE " + LocationListEntry.TABLE_NAME + " ("
+                + LocationListEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, "
+                + LocationListEntry.COLUMN_LOCATIONNAME + " TEXT, "
+                + LocationListEntry.COLUMN_CLIMBCOUNT + " INTEGER, "
+                + LocationListEntry.COLUMN_GPSLATITUDE + " REAL, "
+                + LocationListEntry.COLUMN_GPSLONGITUDE + " REAL, "
+                + LocationListEntry.COLUMN_ISGPS + " INTEGER);";
+
+        // Execute the SQL statement
+        db.execSQL(SQL_CREATE_LOCATION_TABLE);
+
         Log.i(LOG_TAG, "Database Creation Method Run");
 
         insertInitialGradeListData(db);
@@ -182,6 +192,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.i(LOG_TAG, "Database Initial Fill Method Run");
 
         insertDummyClimbs(db);
+
+        insertDummyLocations(db);
 
         Log.i(LOG_TAG, "Database Dummy Fill Method Run");
 
@@ -1938,230 +1950,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public void insertDummyClimbs(SQLiteDatabase db) {
-
-
-        long currentDate = Calendar.getInstance().getTimeInMillis();
-        long dayTwoDate = currentDate + 86400000;
-        long dayThreeDate = currentDate + 86400000 * 2;
-        long dayFourDate = currentDate - 86400000;
-        long dayFiveDate = currentDate - 86400000 * 2;
-
-        ContentValues values = new ContentValues();
-        values.put(ClimbLogEntry.COLUMN_DATE, currentDate);
-        values.put(ClimbLogEntry.COLUMN_NAME, "Action Directe");
-        values.put(ClimbLogEntry.COLUMN_GRADETYPECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_GRADECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_ASCENTTYPECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_LOCATION, "Frankenjura");
-        values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
-        values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
-        values.put(ClimbLogEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_TRUE);
-        values.put(ClimbLogEntry.COLUMN_GPSLATITUDE, 54.34295257719445);
-        values.put(ClimbLogEntry.COLUMN_GPSLONGITUDE, -1.776307589148928);
-        long writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
-        values.clear();
-        ContentValues values2 = new ContentValues();
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_DATE, currentDate);
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ROWID, writeResult);
-        db.insert(DatabaseContract.CalendarTrackerEntry.TABLE_NAME, null, values2);
-        values2.clear();
-
-        values = new ContentValues();
-        values.put(ClimbLogEntry.COLUMN_DATE, currentDate);
-        values.put(ClimbLogEntry.COLUMN_NAME, "Silence");
-        values.put(ClimbLogEntry.COLUMN_GRADETYPECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_GRADECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_ASCENTTYPECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_LOCATION, "Flatanger");
-        values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
-        values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
-        values.put(ClimbLogEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_TRUE);
-        values.put(ClimbLogEntry.COLUMN_GPSLATITUDE, 53.34295257719445);
-        values.put(ClimbLogEntry.COLUMN_GPSLONGITUDE, -1.776307589148928);
-        writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
-        values.clear();
-        values2 = new ContentValues();
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_DATE, currentDate);
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ROWID, writeResult);
-        db.insert(DatabaseContract.CalendarTrackerEntry.TABLE_NAME, null, values2);
-        values2.clear();
-
-        //day+1
-        values = new ContentValues();
-        values.put(ClimbLogEntry.COLUMN_DATE, dayTwoDate);
-        values.put(ClimbLogEntry.COLUMN_NAME, "One Slap");
-        values.put(ClimbLogEntry.COLUMN_GRADETYPECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_GRADECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_ASCENTTYPECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_LOCATION, "Arco");
-        values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
-        values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
-        values.put(ClimbLogEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_FALSE);
-        values.put(ClimbLogEntry.COLUMN_GPSLATITUDE, 0);
-        values.put(ClimbLogEntry.COLUMN_GPSLONGITUDE, 0);
-        writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
-        values.clear();
-        values2 = new ContentValues();
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_DATE, dayTwoDate);
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ROWID, writeResult);
-        db.insert(DatabaseContract.CalendarTrackerEntry.TABLE_NAME, null, values2);
-        values2.clear();
-
-        values = new ContentValues();
-        values.put(ClimbLogEntry.COLUMN_DATE, dayTwoDate);
-        values.put(ClimbLogEntry.COLUMN_NAME, "Marina Superstar");
-        values.put(ClimbLogEntry.COLUMN_GRADETYPECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_GRADECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_ASCENTTYPECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_LOCATION, "Domusnovas");
-        values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
-        values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
-        values.put(ClimbLogEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_FALSE);
-        values.put(ClimbLogEntry.COLUMN_GPSLATITUDE, 0);
-        values.put(ClimbLogEntry.COLUMN_GPSLONGITUDE, 0);
-        writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
-        values.clear();
-        values2 = new ContentValues();
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_DATE, dayTwoDate);
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ROWID, writeResult);
-        db.insert(DatabaseContract.CalendarTrackerEntry.TABLE_NAME, null, values2);
-        values2.clear();
-
-        //day+2
-        values = new ContentValues();
-        values.put(ClimbLogEntry.COLUMN_DATE, dayThreeDate);
-        values.put(ClimbLogEntry.COLUMN_NAME, "La Planta de Shiva");
-        values.put(ClimbLogEntry.COLUMN_GRADETYPECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_GRADECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_ASCENTTYPECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_LOCATION, "Villanueva del Rosario");
-        values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
-        values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
-        values.put(ClimbLogEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_FALSE);
-        values.put(ClimbLogEntry.COLUMN_GPSLATITUDE, 0);
-        values.put(ClimbLogEntry.COLUMN_GPSLONGITUDE, 0);
-        writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
-        values.clear();
-        values2 = new ContentValues();
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_DATE, dayThreeDate);
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ROWID, writeResult);
-        db.insert(DatabaseContract.CalendarTrackerEntry.TABLE_NAME, null, values2);
-        values2.clear();
-
-        values = new ContentValues();
-        values.put(ClimbLogEntry.COLUMN_DATE, dayThreeDate);
-        values.put(ClimbLogEntry.COLUMN_NAME, "La Dura Dura");
-        values.put(ClimbLogEntry.COLUMN_GRADETYPECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_GRADECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_ASCENTTYPECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_LOCATION, "Oliana");
-        values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
-        values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
-        values.put(ClimbLogEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_FALSE);
-        values.put(ClimbLogEntry.COLUMN_GPSLATITUDE, 0);
-        values.put(ClimbLogEntry.COLUMN_GPSLONGITUDE, 0);
-        writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
-        values.clear();
-        values2 = new ContentValues();
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_DATE, dayThreeDate);
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ROWID, writeResult);
-        db.insert(DatabaseContract.CalendarTrackerEntry.TABLE_NAME, null, values2);
-        values2.clear();
-
-        //day-1
-        values = new ContentValues();
-        values.put(ClimbLogEntry.COLUMN_DATE, dayFourDate);
-        values.put(ClimbLogEntry.COLUMN_NAME, "Brad Pitt");
-        values.put(ClimbLogEntry.COLUMN_GRADETYPECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_GRADECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_ASCENTTYPECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_LOCATION, "Stanage");
-        values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
-        values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
-        values.put(ClimbLogEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_TRUE);
-        values.put(ClimbLogEntry.COLUMN_GPSLATITUDE, 49.465508445786284);
-        values.put(ClimbLogEntry.COLUMN_GPSLONGITUDE, 16.246916115916292);
-        writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
-        values.clear();
-        values2 = new ContentValues();
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_DATE, dayFourDate);
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ROWID, writeResult);
-        db.insert(DatabaseContract.CalendarTrackerEntry.TABLE_NAME, null, values2);
-        values2.clear();
-
-        values = new ContentValues();
-        values.put(ClimbLogEntry.COLUMN_DATE, dayFourDate);
-        values.put(ClimbLogEntry.COLUMN_NAME, "Golpe de Estado");
-        values.put(ClimbLogEntry.COLUMN_GRADETYPECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_GRADECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_ASCENTTYPECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_LOCATION, "Siurana");
-        values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
-        values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
-        values.put(ClimbLogEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_TRUE);
-        values.put(ClimbLogEntry.COLUMN_GPSLATITUDE, 50.465508445786284);
-        values.put(ClimbLogEntry.COLUMN_GPSLONGITUDE, 16.246916115916292);
-        writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
-        values.clear();
-        values2 = new ContentValues();
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_DATE, dayFourDate);
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ROWID, writeResult);
-        db.insert(DatabaseContract.CalendarTrackerEntry.TABLE_NAME, null, values2);
-        values2.clear();
-
-        //day-2
-        values = new ContentValues();
-        values.put(ClimbLogEntry.COLUMN_DATE, dayFiveDate);
-        values.put(ClimbLogEntry.COLUMN_NAME, "El Bon Combat");
-        values.put(ClimbLogEntry.COLUMN_GRADETYPECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_GRADECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_ASCENTTYPECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_LOCATION, "La Cova de l'Ocell");
-        values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
-        values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
-        values.put(ClimbLogEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_TRUE);
-        values.put(ClimbLogEntry.COLUMN_GPSLATITUDE, 51.465508445786284);
-        values.put(ClimbLogEntry.COLUMN_GPSLONGITUDE, 16.246916115916292);
-        writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
-        values.clear();
-        values2 = new ContentValues();
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_DATE, dayFiveDate);
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ROWID, writeResult);
-        db.insert(DatabaseContract.CalendarTrackerEntry.TABLE_NAME, null, values2);
-        values2.clear();
-
-        values = new ContentValues();
-        values.put(ClimbLogEntry.COLUMN_DATE, dayFiveDate);
-        values.put(ClimbLogEntry.COLUMN_NAME, "First Round First Minute");
-        values.put(ClimbLogEntry.COLUMN_GRADETYPECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_GRADECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_ASCENTTYPECODE, 1);
-        values.put(ClimbLogEntry.COLUMN_LOCATION, "Margalef");
-        values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
-        values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
-        values.put(ClimbLogEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_TRUE);
-        values.put(ClimbLogEntry.COLUMN_GPSLATITUDE, 52.465508445786284);
-        values.put(ClimbLogEntry.COLUMN_GPSLONGITUDE, 16.246916115916292);
-        writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
-        values.clear();
-        values2 = new ContentValues();
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_DATE, dayFiveDate);
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
-        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ROWID, writeResult);
-        db.insert(DatabaseContract.CalendarTrackerEntry.TABLE_NAME, null, values2);
-        values2.clear();
-    }
-
     public void insertInitialWorkoutTypeData(SQLiteDatabase db) {
 
         ContentValues values = new ContentValues();
@@ -2552,6 +2340,304 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(HoldTypeEntry.COLUMN_HOLDTYPE, "Jam");
         values.put(HoldTypeEntry.COLUMN_DESCRIPTION, "Holds held by jamming/wedging fingers, hands, or arms inside them.");
         db.insert(HoldTypeEntry.TABLE_NAME, null, values);
+        values.clear();
+
+    }
+
+    public void insertDummyClimbs(SQLiteDatabase db) {
+
+
+        long currentDate = Calendar.getInstance().getTimeInMillis();
+        long dayTwoDate = currentDate + 86400000;
+        long dayThreeDate = currentDate + 86400000 * 2;
+        long dayFourDate = currentDate - 86400000;
+        long dayFiveDate = currentDate - 86400000 * 2;
+
+        ContentValues values = new ContentValues();
+        values.put(ClimbLogEntry.COLUMN_DATE, currentDate);
+        values.put(ClimbLogEntry.COLUMN_NAME, "Action Directe");
+        values.put(ClimbLogEntry.COLUMN_GRADETYPECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_GRADECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_ASCENTTYPECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_LOCATION, 1);
+        values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
+        values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        long writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
+        values.clear();
+        ContentValues values2 = new ContentValues();
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_DATE, currentDate);
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ROWID, writeResult);
+        db.insert(DatabaseContract.CalendarTrackerEntry.TABLE_NAME, null, values2);
+        values2.clear();
+
+        values = new ContentValues();
+        values.put(ClimbLogEntry.COLUMN_DATE, currentDate);
+        values.put(ClimbLogEntry.COLUMN_NAME, "Silence");
+        values.put(ClimbLogEntry.COLUMN_GRADETYPECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_GRADECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_ASCENTTYPECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_LOCATION, 2);
+        values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
+        values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
+        values.clear();
+        values2 = new ContentValues();
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_DATE, currentDate);
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ROWID, writeResult);
+        db.insert(DatabaseContract.CalendarTrackerEntry.TABLE_NAME, null, values2);
+        values2.clear();
+
+        //day+1
+        values = new ContentValues();
+        values.put(ClimbLogEntry.COLUMN_DATE, dayTwoDate);
+        values.put(ClimbLogEntry.COLUMN_NAME, "One Slap");
+        values.put(ClimbLogEntry.COLUMN_GRADETYPECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_GRADECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_ASCENTTYPECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_LOCATION, 3);
+        values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
+        values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
+        values.clear();
+        values2 = new ContentValues();
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_DATE, dayTwoDate);
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ROWID, writeResult);
+        db.insert(DatabaseContract.CalendarTrackerEntry.TABLE_NAME, null, values2);
+        values2.clear();
+
+        values = new ContentValues();
+        values.put(ClimbLogEntry.COLUMN_DATE, dayTwoDate);
+        values.put(ClimbLogEntry.COLUMN_NAME, "Marina Superstar");
+        values.put(ClimbLogEntry.COLUMN_GRADETYPECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_GRADECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_ASCENTTYPECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_LOCATION, 4);
+        values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
+        values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
+        values.clear();
+        values2 = new ContentValues();
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_DATE, dayTwoDate);
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ROWID, writeResult);
+        db.insert(DatabaseContract.CalendarTrackerEntry.TABLE_NAME, null, values2);
+        values2.clear();
+
+        //day+2
+        values = new ContentValues();
+        values.put(ClimbLogEntry.COLUMN_DATE, dayThreeDate);
+        values.put(ClimbLogEntry.COLUMN_NAME, "La Planta de Shiva");
+        values.put(ClimbLogEntry.COLUMN_GRADETYPECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_GRADECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_ASCENTTYPECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_LOCATION, 5);
+        values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
+        values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
+        values.clear();
+        values2 = new ContentValues();
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_DATE, dayThreeDate);
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ROWID, writeResult);
+        db.insert(DatabaseContract.CalendarTrackerEntry.TABLE_NAME, null, values2);
+        values2.clear();
+
+        values = new ContentValues();
+        values.put(ClimbLogEntry.COLUMN_DATE, dayThreeDate);
+        values.put(ClimbLogEntry.COLUMN_NAME, "La Dura Dura");
+        values.put(ClimbLogEntry.COLUMN_GRADETYPECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_GRADECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_ASCENTTYPECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_LOCATION, 6);
+        values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
+        values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
+        values.clear();
+        values2 = new ContentValues();
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_DATE, dayThreeDate);
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ROWID, writeResult);
+        db.insert(DatabaseContract.CalendarTrackerEntry.TABLE_NAME, null, values2);
+        values2.clear();
+
+        //day-1
+        values = new ContentValues();
+        values.put(ClimbLogEntry.COLUMN_DATE, dayFourDate);
+        values.put(ClimbLogEntry.COLUMN_NAME, "Brad Pitt");
+        values.put(ClimbLogEntry.COLUMN_GRADETYPECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_GRADECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_ASCENTTYPECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_LOCATION, 7);
+        values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
+        values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
+        values.clear();
+        values2 = new ContentValues();
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_DATE, dayFourDate);
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ROWID, writeResult);
+        db.insert(DatabaseContract.CalendarTrackerEntry.TABLE_NAME, null, values2);
+        values2.clear();
+
+        values = new ContentValues();
+        values.put(ClimbLogEntry.COLUMN_DATE, dayFourDate);
+        values.put(ClimbLogEntry.COLUMN_NAME, "Golpe de Estado");
+        values.put(ClimbLogEntry.COLUMN_GRADETYPECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_GRADECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_ASCENTTYPECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_LOCATION, 8);
+        values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
+        values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
+        values.clear();
+        values2 = new ContentValues();
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_DATE, dayFourDate);
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ROWID, writeResult);
+        db.insert(DatabaseContract.CalendarTrackerEntry.TABLE_NAME, null, values2);
+        values2.clear();
+
+        //day-2
+        values = new ContentValues();
+        values.put(ClimbLogEntry.COLUMN_DATE, dayFiveDate);
+        values.put(ClimbLogEntry.COLUMN_NAME, "El Bon Combat");
+        values.put(ClimbLogEntry.COLUMN_GRADETYPECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_GRADECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_ASCENTTYPECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_LOCATION, 9);
+        values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
+        values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
+        values.clear();
+        values2 = new ContentValues();
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_DATE, dayFiveDate);
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ROWID, writeResult);
+        db.insert(DatabaseContract.CalendarTrackerEntry.TABLE_NAME, null, values2);
+        values2.clear();
+
+        values = new ContentValues();
+        values.put(ClimbLogEntry.COLUMN_DATE, dayFiveDate);
+        values.put(ClimbLogEntry.COLUMN_NAME, "First Round First Minute");
+        values.put(ClimbLogEntry.COLUMN_GRADETYPECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_GRADECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_ASCENTTYPECODE, 1);
+        values.put(ClimbLogEntry.COLUMN_LOCATION, 10);
+        values.put(ClimbLogEntry.COLUMN_FIRSTASCENTCODE, 1);
+        values.put(ClimbLogEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        writeResult = db.insert(ClimbLogEntry.TABLE_NAME, null, values);
+        values.clear();
+        values2 = new ContentValues();
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_DATE, dayFiveDate);
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ISCLIMB, DatabaseContract.IS_CLIMB);
+        values2.put(DatabaseContract.CalendarTrackerEntry.COLUMN_ROWID, writeResult);
+        db.insert(DatabaseContract.CalendarTrackerEntry.TABLE_NAME, null, values2);
+        values2.clear();
+    }
+
+    public void insertDummyLocations(SQLiteDatabase db) {
+
+        //1
+        ContentValues values = new ContentValues();
+        values.put(LocationListEntry.COLUMN_LOCATIONNAME, "Frankenjura");
+        values.put(LocationListEntry.COLUMN_CLIMBCOUNT, 1);
+        values.put(LocationListEntry.COLUMN_GPSLATITUDE, 54.34295257719445);
+        values.put(LocationListEntry.COLUMN_GPSLONGITUDE, -1.776307589148928);
+        values.put(LocationListEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_TRUE);
+        db.insert(LocationListEntry.TABLE_NAME, null, values);
+        values.clear();
+
+        //2
+        values = new ContentValues();
+        values.put(LocationListEntry.COLUMN_LOCATIONNAME, "Flatanger");
+        values.put(LocationListEntry.COLUMN_CLIMBCOUNT, 1);
+        values.put(LocationListEntry.COLUMN_GPSLATITUDE, 53.34295257719445);
+        values.put(LocationListEntry.COLUMN_GPSLONGITUDE, -1.776307589148928);
+        values.put(LocationListEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_TRUE);
+        db.insert(LocationListEntry.TABLE_NAME, null, values);
+        values.clear();
+
+        //3
+        values = new ContentValues();
+        values.put(LocationListEntry.COLUMN_LOCATIONNAME, "Arco");
+        values.put(LocationListEntry.COLUMN_CLIMBCOUNT, 1);
+        values.put(LocationListEntry.COLUMN_GPSLATITUDE, 52.34295257719445);
+        values.put(LocationListEntry.COLUMN_GPSLONGITUDE, -2.776307589148928);
+        values.put(LocationListEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_TRUE);
+        db.insert(LocationListEntry.TABLE_NAME, null, values);
+        values.clear();
+
+        //4
+        values = new ContentValues();
+        values.put(LocationListEntry.COLUMN_LOCATIONNAME, "Domusnovas");
+        values.put(LocationListEntry.COLUMN_CLIMBCOUNT, 1);
+        values.put(LocationListEntry.COLUMN_GPSLATITUDE, 0);
+        values.put(LocationListEntry.COLUMN_GPSLONGITUDE, 0);
+        values.put(LocationListEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_FALSE);
+        db.insert(LocationListEntry.TABLE_NAME, null, values);
+        values.clear();
+
+        //5
+        values = new ContentValues();
+        values.put(LocationListEntry.COLUMN_LOCATIONNAME, "Villanueva del Rosario");
+        values.put(LocationListEntry.COLUMN_CLIMBCOUNT, 1);
+        values.put(LocationListEntry.COLUMN_GPSLATITUDE, 0);
+        values.put(LocationListEntry.COLUMN_GPSLONGITUDE, 0);
+        values.put(LocationListEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_FALSE);
+        db.insert(LocationListEntry.TABLE_NAME, null, values);
+        values.clear();
+
+        //6
+        values = new ContentValues();
+        values.put(LocationListEntry.COLUMN_LOCATIONNAME, "Oliana");
+        values.put(LocationListEntry.COLUMN_CLIMBCOUNT, 1);
+        values.put(LocationListEntry.COLUMN_GPSLATITUDE, 0);
+        values.put(LocationListEntry.COLUMN_GPSLONGITUDE, 0);
+        values.put(LocationListEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_FALSE);
+        db.insert(LocationListEntry.TABLE_NAME, null, values);
+        values.clear();
+
+        //7
+        values = new ContentValues();
+        values.put(LocationListEntry.COLUMN_LOCATIONNAME, "Stanage");
+        values.put(LocationListEntry.COLUMN_CLIMBCOUNT, 1);
+        values.put(LocationListEntry.COLUMN_GPSLATITUDE, 49.465508445786284);
+        values.put(LocationListEntry.COLUMN_GPSLONGITUDE, 16.246916115916292);
+        values.put(LocationListEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_TRUE);
+        db.insert(LocationListEntry.TABLE_NAME, null, values);
+        values.clear();
+
+        //8
+        values = new ContentValues();
+        values.put(LocationListEntry.COLUMN_LOCATIONNAME, "Siurana");
+        values.put(LocationListEntry.COLUMN_CLIMBCOUNT, 1);
+        values.put(LocationListEntry.COLUMN_GPSLATITUDE, 50.465508445786284);
+        values.put(LocationListEntry.COLUMN_GPSLONGITUDE, 16.246916115916292);
+        values.put(LocationListEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_TRUE);
+        db.insert(LocationListEntry.TABLE_NAME, null, values);
+        values.clear();
+
+        //9
+        values = new ContentValues();
+        values.put(LocationListEntry.COLUMN_LOCATIONNAME, "La Cova de l'Ocell");
+        values.put(LocationListEntry.COLUMN_CLIMBCOUNT, 1);
+        values.put(LocationListEntry.COLUMN_GPSLATITUDE, 51.465508445786284);
+        values.put(LocationListEntry.COLUMN_GPSLONGITUDE, 16.246916115916292);
+        values.put(LocationListEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_TRUE);
+        db.insert(LocationListEntry.TABLE_NAME, null, values);
+        values.clear();
+
+        //10
+        values = new ContentValues();
+        values.put(LocationListEntry.COLUMN_LOCATIONNAME, "Margalef");
+        values.put(LocationListEntry.COLUMN_CLIMBCOUNT, 1);
+        values.put(LocationListEntry.COLUMN_GPSLATITUDE, 52.465508445786284);
+        values.put(LocationListEntry.COLUMN_GPSLONGITUDE, 16.246916115916292);
+        values.put(LocationListEntry.COLUMN_ISGPS, DatabaseContract.IS_GPS_TRUE);
+        db.insert(LocationListEntry.TABLE_NAME, null, values);
         values.clear();
 
     }
