@@ -176,12 +176,13 @@ public class LogBookFragmentContent extends Fragment {
                 // Find the child row ID & whether it is a climb or not
                 int childRowID = DatabaseReadWrite.getCalendarTrackerChildRowID(id, context);
                 int isClimb = DatabaseReadWrite.getCalendarTrackerIsClimb(id, context);
-                // if it is a climb, delete entry from the climb-log, if not a climb delete from the training log
+                // if it is a climb, delete entry from the climb-log and decrement the climbcount for that location
+                // if not a climb delete from the training log
                 if (isClimb == DatabaseContract.IS_CLIMB) {
-                    String table = DatabaseContract.ClimbLogEntry.TABLE_NAME;
-                    String whereClause = "_id=?";
-                    String[] whereArgs = new String[]{String.valueOf(childRowID)};
-                    database.delete(table, whereClause, whereArgs);
+                    Bundle bundleClimbData = DatabaseReadWrite.EditClimbLoadEntry(childRowID, context);
+                    int locationId = bundleClimbData.getInt("outputLocationId");
+                    DatabaseReadWrite.incrementLocationClimbCount(locationId, -1, context);
+                    DatabaseReadWrite.deleteClimb(childRowID, database);
                 } else {
                     String table = DatabaseContract.WorkoutLogEntry.TABLE_NAME;
                     String whereClause = "_id=?";

@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,10 +36,16 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.youngonessoft.android.actiondirecte.R;
 import com.youngonessoft.android.actiondirecte.data.DatabaseContract;
+import com.youngonessoft.android.actiondirecte.data.DatabaseHelper;
 import com.youngonessoft.android.actiondirecte.data.DatabaseReadWrite;
 import com.youngonessoft.android.actiondirecte.logbookmodule.ascentpicker.AscentHolder;
 import com.youngonessoft.android.actiondirecte.logbookmodule.gradepicker.ParentGradeHolder;
 import com.youngonessoft.android.actiondirecte.util.TimeUtils;
+
+import java.util.ArrayList;
+
+import in.galaxyofandroid.spinerdialog.OnSpinerItemClick;
+import in.galaxyofandroid.spinerdialog.SpinnerDialog;
 
 /**
  * Created by Bobek on 11/02/2018.
@@ -55,7 +63,10 @@ public class AddClimb extends AppCompatActivity {
     int outputGradeNumber = -1;
     int outputGradeName = -1;
     int outputAscent = -1;
-    int outputLocationId;
+    int outputLocationId = -1;
+    int outputHasGps = 0;
+    double outputLatitude = 0;
+    double outputLongitude = 0;
     String outputLocationName = null;
     String outputRouteName = null;
     String outputDateString = null;
@@ -66,13 +77,17 @@ public class AddClimb extends AppCompatActivity {
     private static final int LOCATION_REQUEST = 3;
     private static final int REQUEST_CHECK_SETTINGS = 4;
     Context mContext;
-    int outputHasGps = 0;
-    double outputLatitude = 0;
-    double outputLongitude = 0;
     boolean gpsAccessPermission = false;
     Boolean mRequestingLocationUpdates = false;
     LocationRequest mLocationRequest;
     LocationCallback mLocationCallback;
+    ArrayList<String> locationNames = new ArrayList<>();
+    ArrayList<Integer> locationIds = new ArrayList<>();
+    ArrayList<Integer> locationIsGps = new ArrayList<>();
+    ArrayList<Double> locationLatitudes = new ArrayList<>();
+    ArrayList<Double> locationLongitudes = new ArrayList<>();
+    SpinnerDialog spinnerDialog;
+    boolean outputIsNewLocation = true;
 
     private FusedLocationProviderClient mFusedLocationClient;
 
@@ -126,6 +141,7 @@ public class AddClimb extends AppCompatActivity {
             String outputDateString = TimeUtils.convertDate(outputDate, "yyyy-MM-dd");
             EditText dateView = findViewById(R.id.editText5);
             dateView.setText(outputDateString);
+            findViewById(R.id.editText2).setVisibility(View.GONE); // Hide the location name input view
 
         } else if (inputIntentCode == ADD_CLIMB_EDIT) {
             // Edit existing record, import data into the form
@@ -138,10 +154,6 @@ public class AddClimb extends AppCompatActivity {
             EditText routeNameView = findViewById(R.id.editText);
             outputRouteName = bundle.getString("outputRouteName");
             routeNameView.setText(outputRouteName);
-
-            EditText locationNameView = findViewById(R.id.editText2);
-            outputLocationName = locationDataBundle.getString("outputLocationName");
-            locationNameView.setText(outputLocationName);
 
             EditText dateView = findViewById(R.id.editText5);
             outputDate = bundle.getLong("outputDate");
@@ -171,7 +183,12 @@ public class AddClimb extends AppCompatActivity {
             EditText ascentTypeView = findViewById(R.id.editText3);
             ascentTypeView.setText(outputStringAscentType);
 
-            // Set GPS data
+            // Set location data data
+            EditText locationNameView = findViewById(R.id.editText2a);
+            outputLocationName = locationDataBundle.getString("outputLocationName");
+            locationNameView.setText(outputLocationName);
+            findViewById(R.id.editText2).setVisibility(View.GONE);
+
             outputHasGps = locationDataBundle.getInt("outputIsGps");
             TextView textViewLatitude = findViewById(R.id.tv_latitude);
             TextView textViewLongitude = findViewById(R.id.tv_longitude);
@@ -205,6 +222,50 @@ public class AddClimb extends AppCompatActivity {
             }
         });
 
+        // Listener for the location picker selection
+        initialiseLocationArrays();
+        spinnerDialog = new SpinnerDialog(this, locationNames, "Select Location");
+        spinnerDialog.bindOnSpinerListener(new OnSpinerItemClick() {
+            @Override
+            public void onClick(String item, int position) {
+                if (position == 0) {
+                    EditText locationNameSpinner = findViewById(R.id.editText2a);
+                    locationNameSpinner.setText(item);
+                    outputLocationId = locationIds.get(position);
+                    findViewById(R.id.editText2).setVisibility(View.VISIBLE);
+                    outputIsNewLocation = true;
+                } else {
+                    outputIsNewLocation = false;
+                    EditText locationNameSpinner = findViewById(R.id.editText2a);
+                    locationNameSpinner.setText(item);
+                    outputLocationId = locationIds.get(position);
+                    findViewById(R.id.editText2).setVisibility(View.GONE);
+                    outputHasGps = locationIsGps.get(position);
+                    outputLatitude = locationLatitudes.get(position);
+                    outputLongitude = locationLongitudes.get(position);
+                    outputLocationName = item;
+                    if (outputHasGps == DatabaseContract.IS_GPS_TRUE) {
+                        TextView latitudeDisplay = findViewById(R.id.tv_latitude);
+                        latitudeDisplay.setText("" + outputLatitude);
+                        TextView longitudeDisplay = findViewById(R.id.tv_longitude);
+                        longitudeDisplay.setText("" + outputLongitude);
+                    } else {
+                        TextView latitudeDisplay = findViewById(R.id.tv_latitude);
+                        latitudeDisplay.setText("No data");
+                        TextView longitudeDisplay = findViewById(R.id.tv_longitude);
+                        longitudeDisplay.setText("No data");
+                    }
+                }
+            }
+        });
+        EditText locationNameSpinner = findViewById(R.id.editText2a);
+        locationNameSpinner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                spinnerDialog.showSpinerDialog();
+            }
+        });
+
         // Listener for GPS button
         Button gpsButton = findViewById(R.id.bt_getGps);
         gpsButton.setOnClickListener(new View.OnClickListener() {
@@ -228,7 +289,12 @@ public class AddClimb extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 EditText routeNameView = findViewById(R.id.editText);
-                EditText locationNameView = findViewById(R.id.editText2);
+                EditText locationNameView;
+                if (outputIsNewLocation) {
+                    locationNameView = findViewById(R.id.editText2);
+                } else {
+                    locationNameView = findViewById(R.id.editText2a);
+                }
                 CheckBox firstAscentCheckBox = findViewById(R.id.checkbox_firstascent);
 
                 outputRouteName = routeNameView.getText().toString();
@@ -239,22 +305,38 @@ public class AddClimb extends AppCompatActivity {
                     outputFirstAscent = DatabaseContract.FIRSTASCENT_FALSE;
                 }
 
-
-                if (outputRouteName.trim().equals("") || outputLocationName.trim().equals("")
-                        || outputAscent == -1 || outputGradeName == -1 || outputGradeNumber == -1
-                        || outputDate == -1 || outputFirstAscent == -1) {
-                    Toast.makeText(getApplicationContext(), "Insufficient information - please ensure all fields are filled", Toast.LENGTH_SHORT).show();
-                } else {
+                if (checkDataFields()) {
                     if (inputIntentCode == ADD_CLIMB_EDIT) {
-                        long updateResult = DatabaseReadWrite.updateClimbLogData(outputRouteName, outputLocationName, outputAscent,
-                                outputGradeName, outputGradeNumber, outputDate, outputFirstAscent, outputHasGps, outputLatitude,
-                                outputLongitude, inputRowID, AddClimb.this);
+                        long updateResult = DatabaseReadWrite.updateClimbLogData(outputRouteName,
+                                outputIsNewLocation,
+                                outputLocationName,
+                                outputLocationId,
+                                outputAscent,
+                                outputGradeName,
+                                outputGradeNumber,
+                                outputDate,
+                                outputFirstAscent,
+                                outputHasGps,
+                                outputLatitude,
+                                outputLongitude,
+                                inputRowID,
+                                AddClimb.this);
                         //Toast.makeText(getApplicationContext(), "Existing Row ID: " + String.valueOf(updateResult), Toast.LENGTH_SHORT).show();
                         finish();
                     } else if (inputIntentCode == ADD_CLIMB_NEW) {
-                        long writeResult = DatabaseReadWrite.writeClimbLogData(outputRouteName, outputLocationName, outputAscent,
-                                outputGradeName, outputGradeNumber, outputDate, outputFirstAscent, outputHasGps, outputLatitude,
-                                outputLongitude, AddClimb.this);
+                        long writeResult = DatabaseReadWrite.writeClimbLogData(outputRouteName,
+                                outputIsNewLocation,
+                                outputLocationName,
+                                outputLocationId,
+                                outputAscent,
+                                outputGradeName,
+                                outputGradeNumber,
+                                outputDate,
+                                outputFirstAscent,
+                                outputHasGps,
+                                outputLatitude,
+                                outputLongitude,
+                                AddClimb.this);
                         DatabaseReadWrite.writeCalendarUpdate(DatabaseContract.IS_CLIMB, outputDate, writeResult, AddClimb.this);
                         //Toast.makeText(getApplicationContext(), "New Row ID: " + String.valueOf(writeResult), Toast.LENGTH_SHORT).show();
                         finish();
@@ -273,7 +355,6 @@ public class AddClimb extends AppCompatActivity {
             }
         });
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -471,5 +552,135 @@ public class AddClimb extends AppCompatActivity {
         Log.i("AddClimb GPS", "stopLocationUpdates = stopping location updates");
     }
 
+    private void initialiseLocationArrays() {
+
+        locationNames.add("Create New");
+        locationIds.add(-2);
+        locationLatitudes.add(-999.0);
+        locationLongitudes.add(-999.0);
+        locationIsGps.add(-1);
+
+        DatabaseHelper handler = new DatabaseHelper(this);
+        SQLiteDatabase database = handler.getWritableDatabase();
+
+        Cursor locationCursor = DatabaseReadWrite.GetAllLocations(database);
+
+        try {
+            //check if the cursor has any items
+            if (locationCursor.getCount() > 0) {
+                int i = 0;
+                //cycle through all items and add to the list
+                while (i < locationCursor.getCount()) {
+                    locationCursor.moveToPosition(i);
+
+                    int idColumnOutput = locationCursor.getColumnIndex(DatabaseContract.LocationListEntry.COLUMN_LOCATIONNAME);
+                    locationNames.add(locationCursor.getString(idColumnOutput));
+
+                    idColumnOutput = locationCursor.getColumnIndex(DatabaseContract.LocationListEntry._ID);
+                    locationIds.add(locationCursor.getInt(idColumnOutput));
+
+                    idColumnOutput = locationCursor.getColumnIndex(DatabaseContract.LocationListEntry.COLUMN_ISGPS);
+                    locationIsGps.add(locationCursor.getInt(idColumnOutput));
+
+                    idColumnOutput = locationCursor.getColumnIndex(DatabaseContract.LocationListEntry.COLUMN_GPSLATITUDE);
+                    locationLatitudes.add(locationCursor.getDouble(idColumnOutput));
+
+                    idColumnOutput = locationCursor.getColumnIndex(DatabaseContract.LocationListEntry.COLUMN_GPSLONGITUDE);
+                    locationLongitudes.add(locationCursor.getDouble(idColumnOutput));
+
+                    i++;
+                }
+
+            }
+        } finally {
+            locationCursor.close();
+            database.close();
+            handler.close();
+        }
+    }
+
+    private boolean checkDataFields() {
+
+        boolean trigger = true;
+
+        if (outputDate == -1) {
+            trigger = false;
+            toggleEditTextColor((EditText) findViewById(R.id.editText5), false);
+            Log.i("checkDataFields", "outputDate");
+        } else {
+            toggleEditTextColor((EditText) findViewById(R.id.editText5), true);
+        }
+
+        if (outputRouteName.trim().equals("")) {
+            trigger = false;
+            toggleEditTextColor((EditText) findViewById(R.id.editText), false);
+            Log.i("checkDataFields", "outputRouteName");
+        } else {
+            toggleEditTextColor((EditText) findViewById(R.id.editText), true);
+        }
+
+        if (outputAscent == -1) {
+            trigger = false;
+            toggleEditTextColor((EditText) findViewById(R.id.editText3), false);
+            Log.i("checkDataFields", "outputAscent");
+        } else {
+            toggleEditTextColor((EditText) findViewById(R.id.editText3), true);
+        }
+
+        if (outputGradeName == -1) {
+            trigger = false;
+            toggleEditTextColor((EditText) findViewById(R.id.editText4), false);
+            Log.i("checkDataFields", "outputGradeName");
+        } else {
+            toggleEditTextColor((EditText) findViewById(R.id.editText4), true);
+        }
+
+        if (outputGradeNumber == -1) {
+            trigger = false;
+            toggleEditTextColor((EditText) findViewById(R.id.editText4), false);
+            Log.i("checkDataFields", "outputGradeNumber");
+        } else {
+            toggleEditTextColor((EditText) findViewById(R.id.editText4), true);
+        }
+
+        if (outputFirstAscent == -1) {
+            trigger = false;
+            Log.i("checkDataFields", "outputFirstAscent");
+        }
+
+        // create new location, but no name entered
+        if (outputLocationId == -2 && outputLocationName.trim().equals("")) {
+            trigger = false;
+            toggleEditTextColor((EditText) findViewById(R.id.editText2), false);
+            Log.i("checkDataFields", "outputLocationId & outputLocationName");
+        } else {
+            toggleEditTextColor((EditText) findViewById(R.id.editText2), true);
+        }
+
+        // location not entered at all
+        if (outputLocationId == -1) {
+            trigger = false;
+            toggleEditTextColor((EditText) findViewById(R.id.editText2a), false);
+            Log.i("checkDataFields", "outputLocationId");
+        } else {
+            toggleEditTextColor((EditText) findViewById(R.id.editText2a), true);
+        }
+
+
+        if (!trigger) {
+            Toast.makeText(getApplicationContext(), "Insufficient information - please ensure all fields are filled", Toast.LENGTH_SHORT).show();
+        }
+
+        return trigger;
+
+    }
+
+    private void toggleEditTextColor(EditText view, boolean state) {
+        if (state) {
+            view.setHintTextColor((getResources().getColor(R.color.availableInput)));
+        } else {
+            view.setHintTextColor((getResources().getColor(R.color.missingInput)));
+        }
+    }
 }
 

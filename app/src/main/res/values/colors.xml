@@ -11,4 +11,6 @@
     <color name="colorClimbingItemsV2">#0e12e8</color>
     <color name="colorTrainingItemsV2">#6f0ce8</color>
     <color name="colorTrainingClimbItemsV2">#0ed3ff</color>
+    <color name="missingInput">#F44336</color>
+    <color name="availableInput">#a8a8a8</color>
 </resources>

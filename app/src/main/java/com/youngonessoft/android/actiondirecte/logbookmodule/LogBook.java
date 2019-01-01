@@ -14,8 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.youngonessoft.android.actiondirecte.R;
-import com.youngonessoft.android.actiondirecte.data.DatabaseContract;
 import com.youngonessoft.android.actiondirecte.data.DatabaseHelper;
+import com.youngonessoft.android.actiondirecte.data.DatabaseReadWrite;
 import com.youngonessoft.android.actiondirecte.util.TimeUtils;
 
 import java.util.Calendar;
@@ -174,7 +174,7 @@ public class LogBook extends AppCompatActivity {
                 long dayStart = tempCalendar.getTimeInMillis();
                 long dayEnd = dayStart + DAYPERIOD;
 
-                Cursor tempCursor = getCursorWorkoutsBetweenDates(dayStart, dayEnd, tempDatabase);
+                Cursor tempCursor = DatabaseReadWrite.getCursorWorkoutsBetweenDates(dayStart, dayEnd, tempDatabase);
 
                 int cursorCount = tempCursor.getCount();
                 tempCursor.close();
@@ -223,26 +223,6 @@ public class LogBook extends AppCompatActivity {
 
     }
 
-    public Cursor getCursorWorkoutsBetweenDates(long dateStart, long dateEnd, SQLiteDatabase db) {
 
-        //grade type
-        String[] projection = {
-                DatabaseContract.CalendarTrackerEntry._ID,
-                DatabaseContract.CalendarTrackerEntry.COLUMN_ROWID,
-                DatabaseContract.CalendarTrackerEntry.COLUMN_DATE,
-                DatabaseContract.CalendarTrackerEntry.COLUMN_ISCLIMB};
-        String whereClause = DatabaseContract.CalendarTrackerEntry.COLUMN_ISCLIMB + "=? AND " + DatabaseContract.CalendarTrackerEntry.COLUMN_DATE + " BETWEEN ? AND ?";
-        String[] whereValue = {String.valueOf(DatabaseContract.IS_WORKOUT), String.valueOf(dateStart), String.valueOf(dateEnd)};
-
-        Cursor cursor = db.query(DatabaseContract.CalendarTrackerEntry.TABLE_NAME,
-                projection,
-                whereClause,
-                whereValue,
-                null,
-                null,
-                null);
-
-        return cursor;
-    }
 
 }
