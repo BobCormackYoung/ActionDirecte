@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.wang.avi.AVLoadingIndicatorView;
 import com.youngonessoft.android.actiondirecte.R;
 import com.youngonessoft.android.actiondirecte.data.DatabaseContract;
 import com.youngonessoft.android.actiondirecte.data.DatabaseHelper;
@@ -89,12 +91,24 @@ public class AddClimb extends AppCompatActivity {
     SpinnerDialog spinnerDialog;
     boolean outputIsNewLocation = true;
 
+    private AVLoadingIndicatorView ivAvi;
+    private ImageView ivGreenTick;
+    private ImageView ivGreyCross;
+
     private FusedLocationProviderClient mFusedLocationClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_climb);
+
+        ivGreenTick = findViewById(R.id.iv_green_tick);
+        ivGreenTick.setVisibility(View.GONE);
+        ivGreyCross = findViewById(R.id.iv_grey_cross);
+        ivGreyCross.setVisibility(View.VISIBLE);
+        ivAvi = findViewById(R.id.iv_av_loading_indicator);
+        //ivAvi.setVisibility(View.GONE);
+        ivAvi.hide();
 
         mContext = AddClimb.this;
 
@@ -106,6 +120,10 @@ public class AddClimb extends AppCompatActivity {
             public void onLocationResult(LocationResult locationResult) {
                 if (locationResult == null) {
                     Log.i("AddClimb GPS", "mLocationCallback > onLocationResult = null");
+                    ivGreenTick.setVisibility(View.GONE);
+                    ivGreyCross.setVisibility(View.VISIBLE);
+                    //ivAvi.setVisibility(View.GONE);
+                    ivAvi.hide();
                     return;
                 }
                 for (Location location : locationResult.getLocations()) {
@@ -119,6 +137,11 @@ public class AddClimb extends AppCompatActivity {
                     textViewLongitude.setText("" + outputLongitude);
                     Log.i("AddClimb GPS", "mLocationCallback > onLocationResult =  long: " + outputLongitude + " lat: " + outputLatitude);
                     outputHasGps = DatabaseContract.IS_GPS_TRUE;
+
+                    ivGreenTick.setVisibility(View.VISIBLE);
+                    ivGreyCross.setVisibility(View.GONE);
+                    //ivAvi.setVisibility(View.GONE);
+                    ivAvi.hide();
 
                     // new GPS value... turn off GPS updates
                     Log.i("AddClimb GPS", "mLocationCallback > onLocationResult = turning off location updates");
@@ -197,6 +220,10 @@ public class AddClimb extends AppCompatActivity {
                 textViewLatitude.setText("" + outputLatitude);
                 outputLongitude = locationDataBundle.getDouble("outputGpsLongitude");
                 textViewLongitude.setText("" + outputLongitude);
+                ivGreenTick.setVisibility(View.VISIBLE);
+                ivGreyCross.setVisibility(View.GONE);
+                //ivAvi.setVisibility(View.GONE);
+                ivAvi.hide();
             } else {
                 textViewLatitude.setText("No data");
                 textViewLongitude.setText("No data");
@@ -274,7 +301,7 @@ public class AddClimb extends AppCompatActivity {
             public void onClick(View v) {
                 if (gpsAccessPermission) {
                     Log.i("AddClimb GPS", "onCreate > GPS Button Pressed Access > gpsAccessPermission=true");
-                    gpsGetLastLocation();
+                    //gpsGetLastLocation();
                     createLocationRequest();
                     startLocationUpdates();
                 } else {
@@ -519,9 +546,11 @@ public class AddClimb extends AppCompatActivity {
         Log.i("AddClimb GPS", "startLocationUpdates = starting updates");
 
         if (gpsAccessPermission) {
-            mFusedLocationClient.requestLocationUpdates(mLocationRequest,
-                    mLocationCallback,
-                    null /* Looper */);
+            ivGreenTick.setVisibility(View.GONE);
+            ivGreyCross.setVisibility(View.GONE);
+            //ivAvi.setVisibility(View.VISIBLE);
+            ivAvi.show();
+            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null /* Looper */);
         }
     }
 
@@ -549,6 +578,7 @@ public class AddClimb extends AppCompatActivity {
 
     private void stopLocationUpdates() {
         mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+        ivAvi.hide();
         Log.i("AddClimb GPS", "stopLocationUpdates = stopping location updates");
     }
 

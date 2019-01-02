@@ -14,8 +14,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_climbing_colored2" />
-                            <entry key="sourceFile" value="C:\Users\Bobek\Documents\Work\Android_Resources\tab_icons\icons_climbing_3F51B5FF_48.svg" />
+                            <entry key="outputName" value="ic_grey_cross" />
+                            <entry key="sourceFile" value="C:\Users\Bobek\Documents\Work\Android_Resources\misc_icons\grey_cross.svg" />
                           </map>
                         </option>
                       </PersistentState>
