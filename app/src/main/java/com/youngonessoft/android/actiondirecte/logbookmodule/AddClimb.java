@@ -94,6 +94,16 @@ public class AddClimb extends AppCompatActivity {
     private AVLoadingIndicatorView ivAvi;
     private ImageView ivGreenTick;
     private ImageView ivGreyCross;
+    TextView textViewLatitude;
+    TextView textViewLongitude;
+    EditText dateView;
+    EditText routeNameView;
+    EditText locationNewNameView;
+    CheckBox firstAscentCheckBox;
+    EditText locationNameView;
+    EditText ascentTypeView;
+    EditText gradeView;
+    Button gpsButton;
 
     private FusedLocationProviderClient mFusedLocationClient;
 
@@ -102,12 +112,10 @@ public class AddClimb extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_climb);
 
-        ivGreenTick = findViewById(R.id.iv_green_tick);
+        mapViews();
+
         ivGreenTick.setVisibility(View.GONE);
-        ivGreyCross = findViewById(R.id.iv_grey_cross);
         ivGreyCross.setVisibility(View.VISIBLE);
-        ivAvi = findViewById(R.id.iv_av_loading_indicator);
-        //ivAvi.setVisibility(View.GONE);
         ivAvi.hide();
 
         mContext = AddClimb.this;
@@ -129,8 +137,6 @@ public class AddClimb extends AppCompatActivity {
                 for (Location location : locationResult.getLocations()) {
                     // Update UI with location data
                     // ...
-                    TextView textViewLatitude = findViewById(R.id.tv_latitude);
-                    TextView textViewLongitude = findViewById(R.id.tv_longitude);
                     outputLatitude = location.getLatitude();
                     textViewLatitude.setText("" + outputLatitude);
                     outputLongitude = location.getLongitude();
@@ -162,9 +168,8 @@ public class AddClimb extends AppCompatActivity {
             // Add a new climb, don't import any data to the form
             //outputDate = Calendar.getInstance().getTimeInMillis();
             String outputDateString = TimeUtils.convertDate(outputDate, "yyyy-MM-dd");
-            EditText dateView = findViewById(R.id.editText5);
             dateView.setText(outputDateString);
-            findViewById(R.id.editText2).setVisibility(View.GONE); // Hide the location name input view
+            locationNewNameView.setVisibility(View.GONE); // Hide the location name input view
 
         } else if (inputIntentCode == ADD_CLIMB_EDIT) {
             // Edit existing record, import data into the form
@@ -174,16 +179,13 @@ public class AddClimb extends AppCompatActivity {
             outputLocationId = bundle.getInt("outputLocationId");
             Bundle locationDataBundle = DatabaseReadWrite.LocationLoadEntry(outputLocationId, this);
 
-            EditText routeNameView = findViewById(R.id.editText);
             outputRouteName = bundle.getString("outputRouteName");
             routeNameView.setText(outputRouteName);
 
-            EditText dateView = findViewById(R.id.editText5);
             outputDate = bundle.getLong("outputDate");
             outputDateString = bundle.getString("outputDateString");
             dateView.setText(outputDateString);
 
-            CheckBox firstAscentCheckBox = findViewById(R.id.checkbox_firstascent);
             outputFirstAscent = bundle.getInt("outputFirstAscent");
             if (outputFirstAscent == DatabaseContract.FIRSTASCENT_TRUE) {
                 firstAscentCheckBox.setChecked(true);
@@ -197,24 +199,19 @@ public class AddClimb extends AppCompatActivity {
             outputGradeName = bundle.getInt("outputGradeName");
             String outputStringGradeName = DatabaseReadWrite.getGradeTextClimb(outputGradeNumber, this);
             String outputStringGradeType = DatabaseReadWrite.getGradeTypeClimb(outputGradeName, this);
-            EditText gradeView = findViewById(R.id.editText4);
             gradeView.setText(outputStringGradeType + " | " + outputStringGradeName);
 
             // Set ascent type
             outputAscent = bundle.getInt("outputAscent");
             String outputStringAscentType = DatabaseReadWrite.getAscentNameTextClimb(outputAscent, this);
-            EditText ascentTypeView = findViewById(R.id.editText3);
             ascentTypeView.setText(outputStringAscentType);
 
             // Set location data data
-            EditText locationNameView = findViewById(R.id.editText2a);
             outputLocationName = locationDataBundle.getString("outputLocationName");
             locationNameView.setText(outputLocationName);
-            findViewById(R.id.editText2).setVisibility(View.GONE);
+            locationNewNameView.setVisibility(View.GONE);
 
             outputHasGps = locationDataBundle.getInt("outputIsGps");
-            TextView textViewLatitude = findViewById(R.id.tv_latitude);
-            TextView textViewLongitude = findViewById(R.id.tv_longitude);
             if (outputHasGps == DatabaseContract.IS_GPS_TRUE) {
                 outputLatitude = locationDataBundle.getDouble("outputGpsLatitude");
                 textViewLatitude.setText("" + outputLatitude);
@@ -222,17 +219,18 @@ public class AddClimb extends AppCompatActivity {
                 textViewLongitude.setText("" + outputLongitude);
                 ivGreenTick.setVisibility(View.VISIBLE);
                 ivGreyCross.setVisibility(View.GONE);
-                //ivAvi.setVisibility(View.GONE);
                 ivAvi.hide();
             } else {
                 textViewLatitude.setText("No data");
                 textViewLongitude.setText("No data");
+                ivGreenTick.setVisibility(View.GONE);
+                ivGreyCross.setVisibility(View.VISIBLE);
+                ivAvi.hide();
             }
         }
 
 
         // Listener for the grade selection
-        EditText gradeView = findViewById(R.id.editText4);
         gradeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -241,7 +239,6 @@ public class AddClimb extends AppCompatActivity {
         });
 
         // Listener for the ascent-type selection
-        EditText ascentTypeView = findViewById(R.id.editText3);
         ascentTypeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -256,37 +253,37 @@ public class AddClimb extends AppCompatActivity {
             @Override
             public void onClick(String item, int position) {
                 if (position == 0) {
-                    EditText locationNameSpinner = findViewById(R.id.editText2a);
-                    locationNameSpinner.setText(item);
+                    locationNameView.setText(item);
                     outputLocationId = locationIds.get(position);
-                    findViewById(R.id.editText2).setVisibility(View.VISIBLE);
+                    locationNewNameView.setVisibility(View.VISIBLE);
                     outputIsNewLocation = true;
                 } else {
                     outputIsNewLocation = false;
-                    EditText locationNameSpinner = findViewById(R.id.editText2a);
-                    locationNameSpinner.setText(item);
+                    locationNameView.setText(item);
                     outputLocationId = locationIds.get(position);
-                    findViewById(R.id.editText2).setVisibility(View.GONE);
+                    locationNewNameView.setVisibility(View.GONE);
                     outputHasGps = locationIsGps.get(position);
                     outputLatitude = locationLatitudes.get(position);
                     outputLongitude = locationLongitudes.get(position);
                     outputLocationName = item;
                     if (outputHasGps == DatabaseContract.IS_GPS_TRUE) {
-                        TextView latitudeDisplay = findViewById(R.id.tv_latitude);
-                        latitudeDisplay.setText("" + outputLatitude);
-                        TextView longitudeDisplay = findViewById(R.id.tv_longitude);
-                        longitudeDisplay.setText("" + outputLongitude);
+                        textViewLatitude.setText("" + outputLatitude);
+                        textViewLongitude.setText("" + outputLongitude);
+                        ivGreenTick.setVisibility(View.VISIBLE);
+                        ivGreyCross.setVisibility(View.GONE);
+                        ivAvi.hide();
                     } else {
-                        TextView latitudeDisplay = findViewById(R.id.tv_latitude);
-                        latitudeDisplay.setText("No data");
-                        TextView longitudeDisplay = findViewById(R.id.tv_longitude);
-                        longitudeDisplay.setText("No data");
+                        textViewLatitude.setText("No data");
+                        textViewLongitude.setText("No data");
+                        ivGreenTick.setVisibility(View.GONE);
+                        ivGreyCross.setVisibility(View.VISIBLE);
+                        ivAvi.hide();
                     }
                 }
             }
         });
-        EditText locationNameSpinner = findViewById(R.id.editText2a);
-        locationNameSpinner.setOnClickListener(new View.OnClickListener() {
+
+        locationNameView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 spinnerDialog.showSpinerDialog();
@@ -294,7 +291,6 @@ public class AddClimb extends AppCompatActivity {
         });
 
         // Listener for GPS button
-        Button gpsButton = findViewById(R.id.bt_getGps);
         gpsButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -315,17 +311,17 @@ public class AddClimb extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText routeNameView = findViewById(R.id.editText);
-                EditText locationNameView;
+
+                EditText locationNameViewOutput;
                 if (outputIsNewLocation) {
-                    locationNameView = findViewById(R.id.editText2);
+                    locationNameViewOutput = findViewById(R.id.editText2);
                 } else {
-                    locationNameView = findViewById(R.id.editText2a);
+                    locationNameViewOutput = findViewById(R.id.editText2a);
                 }
                 CheckBox firstAscentCheckBox = findViewById(R.id.checkbox_firstascent);
 
                 outputRouteName = routeNameView.getText().toString();
-                outputLocationName = locationNameView.getText().toString();
+                outputLocationName = locationNameViewOutput.getText().toString();
                 if (firstAscentCheckBox.isChecked()) {
                     outputFirstAscent = DatabaseContract.FIRSTASCENT_TRUE;
                 } else {
@@ -435,7 +431,6 @@ public class AddClimb extends AppCompatActivity {
         // Put grade text date in the view
         outputGradeName = data.getIntExtra("OutputGradeName", 0);
         String outputStringGradeType = DatabaseReadWrite.getGradeTypeClimb(outputGradeName, this);
-        EditText gradeView = findViewById(R.id.editText4);
         gradeView.setText(outputStringGradeType + " | " + outputStringGradeName);
     }
 
@@ -445,8 +440,7 @@ public class AddClimb extends AppCompatActivity {
 
         //Create handler to connect to SQLite DB
         String outputStringAscentType = DatabaseReadWrite.getAscentNameTextClimb(outputAscent, this);
-        EditText gradeView = findViewById(R.id.editText3);
-        gradeView.setText(outputStringAscentType);
+        ascentTypeView.setText(outputStringAscentType);
     }
 
     // check permission for accessing location
@@ -481,8 +475,6 @@ public class AddClimb extends AppCompatActivity {
             public void onSuccess(Location location) {
                 // Got last known location. In some rare situations this can be null.
                 if (location != null) {
-                    TextView textViewLatitude = findViewById(R.id.tv_latitude);
-                    TextView textViewLongitude = findViewById(R.id.tv_longitude);
                     outputLatitude = location.getLatitude();
                     textViewLatitude.setText("" + outputLatitude);
                     outputLongitude = location.getLongitude();
@@ -635,42 +627,42 @@ public class AddClimb extends AppCompatActivity {
 
         if (outputDate == -1) {
             trigger = false;
-            toggleEditTextColor((EditText) findViewById(R.id.editText5), false);
+            toggleEditTextColor(dateView, false);
             Log.i("checkDataFields", "outputDate");
         } else {
-            toggleEditTextColor((EditText) findViewById(R.id.editText5), true);
+            toggleEditTextColor(dateView, true);
         }
 
         if (outputRouteName.trim().equals("")) {
             trigger = false;
-            toggleEditTextColor((EditText) findViewById(R.id.editText), false);
+            toggleEditTextColor(routeNameView, false);
             Log.i("checkDataFields", "outputRouteName");
         } else {
-            toggleEditTextColor((EditText) findViewById(R.id.editText), true);
+            toggleEditTextColor(routeNameView, true);
         }
 
         if (outputAscent == -1) {
             trigger = false;
-            toggleEditTextColor((EditText) findViewById(R.id.editText3), false);
+            toggleEditTextColor(ascentTypeView, false);
             Log.i("checkDataFields", "outputAscent");
         } else {
-            toggleEditTextColor((EditText) findViewById(R.id.editText3), true);
+            toggleEditTextColor(ascentTypeView, true);
         }
 
         if (outputGradeName == -1) {
             trigger = false;
-            toggleEditTextColor((EditText) findViewById(R.id.editText4), false);
+            toggleEditTextColor(gradeView, false);
             Log.i("checkDataFields", "outputGradeName");
         } else {
-            toggleEditTextColor((EditText) findViewById(R.id.editText4), true);
+            toggleEditTextColor(gradeView, true);
         }
 
         if (outputGradeNumber == -1) {
             trigger = false;
-            toggleEditTextColor((EditText) findViewById(R.id.editText4), false);
+            toggleEditTextColor(gradeView, false);
             Log.i("checkDataFields", "outputGradeNumber");
         } else {
-            toggleEditTextColor((EditText) findViewById(R.id.editText4), true);
+            toggleEditTextColor(gradeView, true);
         }
 
         if (outputFirstAscent == -1) {
@@ -681,19 +673,19 @@ public class AddClimb extends AppCompatActivity {
         // create new location, but no name entered
         if (outputLocationId == -2 && outputLocationName.trim().equals("")) {
             trigger = false;
-            toggleEditTextColor((EditText) findViewById(R.id.editText2), false);
+            toggleEditTextColor(locationNewNameView, false);
             Log.i("checkDataFields", "outputLocationId & outputLocationName");
         } else {
-            toggleEditTextColor((EditText) findViewById(R.id.editText2), true);
+            toggleEditTextColor(locationNewNameView, true);
         }
 
         // location not entered at all
         if (outputLocationId == -1) {
             trigger = false;
-            toggleEditTextColor((EditText) findViewById(R.id.editText2a), false);
+            toggleEditTextColor(locationNameView, false);
             Log.i("checkDataFields", "outputLocationId");
         } else {
-            toggleEditTextColor((EditText) findViewById(R.id.editText2a), true);
+            toggleEditTextColor(locationNameView, true);
         }
 
 
@@ -711,6 +703,22 @@ public class AddClimb extends AppCompatActivity {
         } else {
             view.setHintTextColor((getResources().getColor(R.color.missingInput)));
         }
+    }
+
+    protected void mapViews() {
+        ivGreenTick = findViewById(R.id.iv_green_tick);
+        ivGreyCross = findViewById(R.id.iv_grey_cross);
+        ivAvi = findViewById(R.id.iv_av_loading_indicator);
+        textViewLatitude = findViewById(R.id.tv_latitude);
+        textViewLongitude = findViewById(R.id.tv_longitude);
+        routeNameView = findViewById(R.id.editText);
+        locationNewNameView = findViewById(R.id.editText2);
+        locationNameView = findViewById(R.id.editText2a);
+        ascentTypeView = findViewById(R.id.editText3);
+        gradeView = findViewById(R.id.editText4);
+        dateView = findViewById(R.id.editText5);
+        firstAscentCheckBox = findViewById(R.id.checkbox_firstascent);
+        gpsButton = findViewById(R.id.bt_getGps);
     }
 }
 
