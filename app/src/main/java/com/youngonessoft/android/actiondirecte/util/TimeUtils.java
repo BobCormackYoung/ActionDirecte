@@ -48,7 +48,7 @@ public class TimeUtils {
             day.set(Calendar.SECOND, 0);
             day.set(Calendar.MILLISECOND, 1);
 
-            int position = (int) ((day.getTimeInMillis() - FIRST_DAY_OF_TIME.getTimeInMillis()) / 86400000 + 1);
+            int position = (int) ((day.getTimeInMillis() - FIRST_DAY_OF_TIME.getTimeInMillis()) / 86400000);
             Log.i("getPositionForDay", "P: " + position + ", D: " + convertDate(day.getTimeInMillis(), "yyyy-MM-dd"));
 
             return (position);
